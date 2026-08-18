@@ -1457,39 +1457,75 @@ Reglas:
 - INCLUYE SIEMPRE el aceite de cocinado, las salsas y los aliños que se intuyan aunque no se vean bien: es la causa número uno de subestimar calorías.
 - Si algo no se distingue, elige la opción más calórica razonable y dilo en "aviso".
 - Sé breve en los nombres. Cantidades en gramos.
-Responde ÚNICAMENTE con un objeto JSON con esta forma exacta, sin texto alrededor y sin markdown:
-{"plato":"nombre corto del plato","items":[{"a":"alimento","g":150,"kcal":250,"p":30}],"kcal":520,"p":45,"conf":"alta|media|baja","aviso":"una frase o cadena vacía"}`;
+Devuelve el resultado llamando a la herramienta "registrar_comida".`;
+
+const HERR={
+  name:'registrar_comida',
+  description:'Registra el contenido nutricional estimado del plato de la foto.',
+  input_schema:{type:'object',properties:{
+    plato:{type:'string',description:'Nombre corto del plato'},
+    items:{type:'array',description:'Alimentos identificados',items:{type:'object',properties:{
+      a:{type:'string',description:'Alimento'}, g:{type:'number',description:'Gramos estimados'},
+      kcal:{type:'number'}, p:{type:'number',description:'Proteína en gramos'}},required:['a','kcal']}},
+    kcal:{type:'number',description:'Calorías totales del plato'},
+    p:{type:'number',description:'Proteína total en gramos'},
+    conf:{type:'string',enum:['alta','media','baja'],description:'Confianza de la estimación'},
+    aviso:{type:'string',description:'Aviso breve si algo es difícil de estimar; cadena vacía si no hay'}
+  },required:['plato','kcal','p']}
+};
+
+// Extrae el primer objeto JSON que aparezca en un texto, aunque venga con ``` o con prosa alrededor
+function sacaJSON(t){
+  if(!t) return null;
+  t=t.replace(/```json|```/g,'');
+  const a=t.indexOf('{'), b=t.lastIndexOf('}');
+  if(a<0||b<=a) return null;
+  try{ return JSON.parse(t.slice(a,b+1)); }catch(err){ return null; }
+}
+
+async function llamaAPI(cuerpo){
+  const r=await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'content-type':'application/json','x-api-key':D.api.key,
+      'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body:JSON.stringify(cuerpo)});
+  if(!r.ok){
+    const t=await r.text();
+    let msg='Error '+r.status;
+    if(r.status===401) msg='La clave de API no es válida. Revísala en Más → Reconocimiento por foto.';
+    else if(r.status===404) msg='Ese modelo no existe o no está disponible en tu cuenta. Prueba con claude-haiku-4-5 o claude-sonnet-5.';
+    else if(r.status===429) msg='Demasiadas peticiones o sin saldo. Espera un momento o revisa tu saldo en console.anthropic.com.';
+    else if(r.status>=500) msg='La API está dando error ahora mismo. Prueba en un minuto.';
+    const e=new Error(msg+'\n\n'+t.slice(0,200)); e.status=r.status; e.cuerpo=t; throw e;
+  }
+  return r.json();
+}
 
 async function analiza(b64grande, b64mini){
   abre(`<p class="sh-t">Analizando la foto</p><p class="sh-s">Suele tardar unos segundos.</p>
     <div class="gbox"><p><span class="spin"></span>Preguntando a Claude…</p></div>`);
+  const modelo=D.api.model||'claude-haiku-4-5';
+  const msgs=[{role:'user',content:[
+    {type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64grande.split(',')[1]}},
+    {type:'text',text:'¿Qué hay en este plato y cuántas calorías y proteína tiene?'}]}];
   try{
-    const r=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'content-type':'application/json','x-api-key':D.api.key,
-        'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({
-        model:D.api.model||'claude-haiku-4-5', max_tokens:900, system:SYS,
-        messages:[
-          {role:'user',content:[
-            {type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64grande.split(',')[1]}},
-            {type:'text',text:'¿Qué hay en este plato y cuántas calorías y proteína tiene? Responde solo el JSON.'}]},
-          {role:'assistant',content:'{'}
-        ]})
-    });
-    if(!r.ok){
-      const t=await r.text();
-      let msg='Error '+r.status;
-      if(r.status===401) msg='La clave de API no es válida. Revísala en Más → Reconocimiento por foto.';
-      else if(r.status===404) msg='Ese modelo no existe o no está disponible en tu cuenta. Prueba con claude-haiku-4-5.';
-      else if(r.status===429) msg='Demasiadas peticiones o sin saldo. Espera un momento o revisa tu saldo en console.anthropic.com.';
-      else if(r.status>=500) msg='La API está dando error ahora mismo. Prueba en un minuto.';
-      throw new Error(msg+'\n\n'+t.slice(0,180));
+    let o=null;
+    try{
+      // Vía principal: herramienta con esquema. Funciona en todos los modelos.
+      const j=await llamaAPI({model:modelo, max_tokens:1200, system:SYS, messages:msgs,
+        tools:[HERR], tool_choice:{type:'tool',name:'registrar_comida'}});
+      const b=(j.content||[]).find(c=>c.type==='tool_use');
+      if(b) o=b.input;
+      if(!o) o=sacaJSON((j.content||[]).filter(c=>c.type==='text').map(c=>c.text).join('\n'));
+    }catch(err){
+      // Plan B: sin herramientas, pidiendo JSON en el texto
+      if(err.status===400){
+        const j2=await llamaAPI({model:modelo, max_tokens:1200, messages:msgs,
+          system:SYS+`\nResponde ÚNICAMENTE con este JSON, sin texto alrededor:\n{"plato":"","items":[{"a":"","g":0,"kcal":0,"p":0}],"kcal":0,"p":0,"conf":"media","aviso":""}`});
+        o=sacaJSON((j2.content||[]).filter(c=>c.type==='text').map(c=>c.text).join('\n'));
+      } else throw err;
     }
-    const j=await r.json();
-    const txt='{'+(j.content&&j.content[0]&&j.content[0].text||'');
-    let o; try{ o=JSON.parse(txt.replace(/```json|```/g,'').trim()); }
-    catch(err){ throw new Error('La respuesta no vino en el formato esperado. Puedes meterlo a mano.'); }
+    if(!o||typeof o.kcal!=='number') throw new Error('La respuesta no vino en el formato esperado. Puedes meterlo a mano y seguir.');
     formComida({n:o.plato||'Comida', kcal:Math.round(o.kcal||0), p:Math.round(o.p||0), img:b64mini,
                 src:'ia', items:o.items||[], conf:o.conf||'media', aviso:o.aviso||''});
   }catch(err){
