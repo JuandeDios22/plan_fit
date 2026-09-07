@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
-<title>Mi Plan · 108 → 85</title>
+<title>Mi Plan · 108 → 82,5</title>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#0f0f0e">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -166,6 +166,7 @@ details .db{padding:0 15px 14px;border-top:1px solid var(--bd);padding-top:12px}
 .vid iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 .info{width:26px;height:26px;flex:none;border-radius:99px;border:1.5px solid var(--bd);background:var(--s2);
   color:var(--tx3);font-size:13px;font-weight:700;display:grid;place-items:center;padding:0;font-style:italic}
+.info.sw{font-style:normal;font-size:14px;margin-right:-3px}
 /* comidas */
 .ring{display:flex;gap:12px;align-items:center}
 .meal{background:var(--s1);border:1px solid var(--bd);border-radius:13px;padding:11px 13px;margin-bottom:8px;
@@ -186,6 +187,23 @@ details .db{padding:0 15px 14px;border-top:1px solid var(--bd);padding-top:12px}
 .res div{padding:10px 12px;border-bottom:1px solid var(--bd);font-size:13.5px;color:var(--tx2)}
 .res div:last-child{border:none}
 .res div b{color:var(--tx);font-weight:600}
+/* menú, recetas e ingredientes */
+.tabs{overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:0 0 auto;padding:8px 12px;white-space:nowrap}
+.slot{background:var(--s1);border:1px solid var(--bd);border-radius:14px;padding:12px 14px;margin-bottom:8px}
+.slot .sl{font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--tx3);font-weight:700}
+.slot .sn{font-size:15px;font-weight:650;letter-spacing:-.01em;margin-top:2px}
+.slot .sm{font-size:12.5px;color:var(--tx3);margin-top:2px}
+.inglist{background:var(--s2);border:1px solid var(--bd);border-radius:12px;padding:2px 12px}
+.ingr{display:grid;grid-template-columns:1fr 86px 28px;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid var(--bd)}
+.ingr:last-child{border-bottom:none}
+.ingr .inn{font-size:13.5px;line-height:1.35;min-width:0}
+.ingr .ing{position:relative}
+.ingr .ing input{padding:8px 26px 8px 10px;text-align:right;font-size:15px}
+.ingr .ing span{position:absolute;right:9px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--tx3)}
+.inglist p{padding:10px 0}
+textarea{resize:vertical;line-height:1.45}
 </style>
 </head>
 <body>
@@ -244,13 +262,15 @@ details .db{padding:0 15px 14px;border-top:1px solid var(--bd);padding-top:12px}
 /* ══════════════════ DATOS DEL PLAN ══════════════════ */
 const START = '2026-08-18';          // día 1 del ciclo 1
 const BODA  = '2027-02-14';
-const PESO0 = 108, META = 85, ALTURA = 1.83;
+const PESO0 = 108, META = 82.5, ALTURA = 1.83;
 
 // curva objetivo, semana → kg
-const CURVA = [108,106.5,105.5,104.5,103.5,102.5,101.5,100.5,99.5,98.6,97.7,96.8,95.9,95,94.1,93.3,
-               92.5,91.7,90.9,90.1,89.3,88.5,87.7,86.9,86.1,85.3,84.5];
-const HITOS = {0:'Inicio',8:'Bajas de 100 kg',9:'Recalcular dieta → 2.050 kcal',15:'−15 kg · objetivo de diciembre',
-               16:'Recalcular dieta → 1.950 kcal',18:'Navidad: mantener',25:'Objetivo alcanzado',26:'Boda'};
+const CURVA = [108,106,104.6,103.5,102.1,100.7,99.4,98.1,96.9,95.7,94.5,93.4,92.3,91.3,90.3,89.3,
+               88.4,87.5,86.7,86.7,85.9,85.1,84.4,83.7,83.1,82.5,82.5];
+const HITOS = {0:'Inicio',3:'Recalculada aquí · 103,5 kg',6:'Bajas de 100 kg',7:'Recalcular dieta → 2.050 kcal',
+               13:'Recalcular dieta → 1.950 kcal',15:'Bajas de 90 kg · objetivo de diciembre',
+               18:'Navidad: mantener, no bajar',21:'Recalcular dieta → 1.900 kcal',
+               25:'Meta: 82,5 kg',26:'Boda'};
 
 // e(nombre, series, reps, nota)
 const e = (n,s,r,nt='') => ({n,s,r,nt});
@@ -440,8 +460,8 @@ const BLOQUES = [
  {c:[1,2],   n:'Adaptación',    f:'Aprender la técnica y crear el hábito. Cardio suave predominante.', r:'RPE 7'},
  {c:[3,5],   n:'Construcción',  f:'Subir cargas de verdad. Aquí se construye el músculo que te va a definir.', r:'RPE 8'},
  {c:[6,8],   n:'Intensificación',f:'Más densidad, menos descanso, complejos. El bloque que más grasa mueve.', r:'RPE 8-9'},
- {c:[9,11],  n:'Definición',    f:'Mantener la fuerza y subir el volumen de cardio. Llegar a diciembre en ~93 kg.', r:'RPE 8'},
- {c:[12,99], n:'Recta final',   f:'Navidad controlada y enero a tope hasta los 85 kg.', r:'RPE 8-9'}
+ {c:[9,11],  n:'Definición',    f:'Mantener la fuerza y subir el volumen de cardio. Llegar a diciembre por debajo de 90 kg.', r:'RPE 8'},
+ {c:[12,99], n:'Recta final',   f:'Navidad controlada y enero a tope hasta los 82,5 kg.', r:'RPE 8-9'}
 ];
 
 /* ══════════════════ ESTADO ══════════════════ */
@@ -449,11 +469,12 @@ const KEY='juandePlan_v1';
 let D = load();
 function load(){
   try{ const r=JSON.parse(localStorage.getItem(KEY)); if(r&&r.v===1) return r; }catch(err){}
-  return {v:1, offset:0, log:{}, peso:{}, cintura:{}, notas:{}, comidas:{}, favs:[], api:{key:'',model:'claude-haiku-4-5'}};
+  return {v:1, offset:0, log:{}, peso:{}, cintura:{}, notas:{}, comidas:{}, favs:[], cambios:{}, veto:[], api:{key:'',model:'claude-haiku-4-5'}};
 }
 // compatibilidad con copias antiguas
 if(!D.comidas) D.comidas={}; if(!D.favs) D.favs=[];
 if(!D.api) D.api={key:'',model:'claude-haiku-4-5'};
+if(!D.cambios) D.cambios={}; if(!D.veto) D.veto=[];
 let saveT=null;
 function save(){ clearTimeout(saveT); saveT=setTimeout(()=>{
   try{ localStorage.setItem(KEY, JSON.stringify(D)); }catch(err){ toast('No se pudo guardar'); }
@@ -547,7 +568,8 @@ function renderHoy(){
   if(P.w) h+=`<details><summary>Calentamiento</summary><div class="db"><p style="margin:0">${esc(P.w)}</p></div></details>`;
 
   // progreso
-  const total=V.ex.length, hechos=V.ex.filter((_,i)=>L['e'+i]&&L['e'+i].done).length;
+  const EX=exDia(st.dia,vr);
+  const total=EX.length, hechos=EX.filter((_,i)=>L['e'+i]&&L['e'+i].done).length;
   h+=`<div class="card tight">
     <div class="row between"><div style="font-size:13.5px;font-weight:650">${hechos} de ${total} ejercicios</div>
     <div class="muted">${Math.round(hechos/total*100)}%</div></div>
@@ -556,7 +578,7 @@ function renderHoy(){
 
   // ejercicios
   h+=`<h3>La sesión</h3>`;
-  V.ex.forEach((x,i)=>{
+  EX.forEach((x,i)=>{
     const le=L['e'+i]||{sets:[]};
     const done=!!le.done;
     const logable = P.k==='fuerza' && x.s>1 && !/min|s$|✓|total|est\.|de cada|desc\./.test(x.r);
@@ -567,9 +589,11 @@ function renderHoy(){
           <div class="ex-n">${esc(x.n)}</div>
           <div class="ex-m">${x.s>1?x.s+' × ':''}${esc(x.r)}</div>
         </div>
+        <button class="info sw" onclick="event.stopPropagation();cambiaEjercicio(${st.dia},'${vr}',${i})" aria-label="Cambiar ejercicio">⇄</button>
         <button class="info" onclick="event.stopPropagation();fichaEjercicio(${st.dia},'${vr}',${i})" aria-label="Cómo se hace">i</button>
       </div>`;
-    if(x.nt) h+=`<div class="note">${esc(x.nt)}</div>`;
+    if(x.sw) h+=`<div class="note">En lugar de ${esc(x.sw)} · <span onclick="deshaceEj(${st.dia},'${vr}',${i})" style="text-decoration:underline">volver al original</span></div>`;
+    else if(x.nt) h+=`<div class="note">${esc(x.nt)}</div>`;
     if(logable){
       h+=`<div class="setshead"><div></div><div>Peso (kg)</div><div>Reps</div><div></div></div><div class="sets">`;
       for(let s=0;s<x.s;s++){
@@ -621,11 +645,11 @@ function ultimaVez(dia,vr,ciclo){
   for(let c=ciclo-3;c>=1;c-=3){
     const L=D.log['c'+c+'d'+dia];
     if(L&&L.fin){
-      const P=PLAN[dia].v[vr]; let out='<table>';
-      P.ex.forEach((x,i)=>{
+      let out='<table>';
+      exDia(dia,vr).forEach((x,i)=>{
         const le=L['e'+i]; if(!le||!le.sets) return;
         const s=le.sets.filter(v=>v&&v.w).map(v=>v.w+'×'+(v.r||'?')).join(' · ');
-        if(s) out+=`<tr><td class="k">${esc(x.n)}</td><td>${esc(s)}</td></tr>`;
+        if(s) out+=`<tr><td class="k">${esc(le.n||x.n)}</td><td>${esc(s)}</td></tr>`;
       });
       out+='</table>';
       return out.includes('<tr>') ? `<p class="muted" style="margin:0 0 8px">Ciclo ${c}</p>`+out : null;
@@ -644,12 +668,14 @@ function toggleEx(i){
 function setVal(i,s,campo,val){
   const k=claveDia(VER); D.log[k]=D.log[k]||{};
   const le=D.log[k]['e'+i]=D.log[k]['e'+i]||{sets:[]};
+  le.n=nombreEj(i);
   le.sets[s]=le.sets[s]||{}; le.sets[s][campo]= val===''?undefined:Number(val);
   save();
 }
 function setOk(i,s){
   const k=claveDia(VER); D.log[k]=D.log[k]||{};
   const le=D.log[k]['e'+i]=D.log[k]['e'+i]||{sets:[]};
+  le.n=nombreEj(i);
   le.sets[s]=le.sets[s]||{}; le.sets[s].ok=!le.sets[s].ok;
   if(le.sets[s].ok){ vibra(15); startT(90,'Descanso 90 s'); }
   // autocompleta el peso de la serie anterior si está vacío
@@ -760,14 +786,14 @@ function renderPeso(){
   <div class="grid3" style="margin-bottom:14px">
     <div class="stat"><div class="l">Objetivo hoy</div><div class="v" style="font-size:19px">${obj.toFixed(1)}</div>
       <div class="n" style="color:${dif<=.3?'var(--green)':dif<=1.5?'var(--yellow)':'var(--red)'}">${dif>0?'+':''}${dif.toFixed(1)} kg</div></div>
-    <div class="stat"><div class="l">Falta</div><div class="v" style="font-size:19px">${Math.max(0,act-META).toFixed(1)}</div><div class="n">kg hasta 85</div></div>
+    <div class="stat"><div class="l">Falta</div><div class="v" style="font-size:19px">${Math.max(0,act-META).toFixed(1)}</div><div class="n">kg hasta 82,5</div></div>
     <div class="stat"><div class="l">Boda</div><div class="v" style="font-size:19px">${dBoda}</div><div class="n">días · IMC ${imc.toFixed(1)}</div></div>
   </div>`;
 
   // progreso global
   const pct=Math.max(0,Math.min(100,perd/(PESO0-META)*100));
   h+=`<div class="card tight"><div class="row between"><div style="font-size:13.5px;font-weight:650">Camino recorrido</div>
-    <div class="muted">${pct.toFixed(0)}% de los 23 kg</div></div><div class="bar"><i style="width:${pct}%"></i></div></div>`;
+    <div class="muted">${pct.toFixed(0)}% de los 25,5 kg</div></div><div class="bar"><i style="width:${pct}%"></i></div></div>`;
 
   // registrar
   h+=`<h3>Pésate hoy</h3>
@@ -843,16 +869,16 @@ function cintTabla(){
 }
 function grafico(){
   const W=340,H=200,M={t:14,r:12,b:24,l:28};
-  const iw=W-M.l-M.r, ih=H-M.t-M.b, yMin=82,yMax=110;
+  const iw=W-M.l-M.r, ih=H-M.t-M.b, yMin=80,yMax=110;
   const X=i=>M.l+i*iw/(CURVA.length-1), Y=v=>M.t+ih-(v-yMin)/(yMax-yMin)*ih;
   let g='';
-  for(let v=84;v<=108;v+=6){
+  for(let v=82;v<=106;v+=6){
     g+=`<line x1="${M.l}" y1="${Y(v).toFixed(1)}" x2="${W-M.r}" y2="${Y(v).toFixed(1)}" stroke="#33332f" stroke-width="1"/>`;
     g+=`<text x="${M.l-6}" y="${(Y(v)+3.5).toFixed(1)}" text-anchor="end" font-size="8.5" fill="#8f8e85">${v}</text>`;
   }
   [0,7,15,21,26].forEach(i=>{ const d=parse(START); d.setDate(d.getDate()+i*7);
     g+=`<text x="${X(i).toFixed(1)}" y="${H-M.b+15}" text-anchor="middle" font-size="8.5" fill="#8f8e85">${fmtFecha(iso(d))}</text>`; });
-  g+=`<line x1="${M.l}" y1="${Y(85).toFixed(1)}" x2="${W-M.r}" y2="${Y(85).toFixed(1)}" stroke="#3987e5" stroke-width="1" stroke-dasharray="4 3" opacity=".6"/>`;
+  g+=`<line x1="${M.l}" y1="${Y(META).toFixed(1)}" x2="${W-M.r}" y2="${Y(META).toFixed(1)}" stroke="#3987e5" stroke-width="1" stroke-dasharray="4 3" opacity=".6"/>`;
   g+=`<line x1="${X(15).toFixed(1)}" y1="${M.t}" x2="${X(15).toFixed(1)}" y2="${M.t+ih}" stroke="#33332f" stroke-width="1.5"/>`;
   g+=`<text x="${(X(15)+4).toFixed(1)}" y="${M.t+9}" font-size="8.5" fill="#8f8e85">1 dic</text>`;
   g+=`<path d="${CURVA.map((v,i)=>(i?'L':'M')+X(i).toFixed(1)+' '+Y(v).toFixed(1)).join(' ')}" fill="none" stroke="#3987e5" stroke-width="2" stroke-linejoin="round"/>`;
@@ -863,7 +889,7 @@ function grafico(){
   if(pts.length>1) g+=`<path d="${pts.map((p,j)=>(j?'L':'M')+X(p[0]).toFixed(1)+' '+Y(p[1]).toFixed(1)).join(' ')}" fill="none" stroke="#d95926" stroke-width="2" stroke-linejoin="round"/>`;
   pts.forEach(p=>{ g+=`<circle cx="${X(p[0]).toFixed(1)}" cy="${Y(p[1]).toFixed(1)}" r="3.4" fill="#d95926" stroke="#1a1a19" stroke-width="1.6"/>`; });
   g+=`<circle cx="${X(0)}" cy="${Y(108).toFixed(1)}" r="3.4" fill="#3987e5"/>`;
-  g+=`<text x="${W-M.r}" y="${(Y(85)-5).toFixed(1)}" text-anchor="end" font-size="9" font-weight="600" fill="#c3c2b7">meta 85</text>`;
+  g+=`<text x="${W-M.r}" y="${(Y(META)-5).toFixed(1)}" text-anchor="end" font-size="9" font-weight="600" fill="#c3c2b7">meta 82,5</text>`;
   return `<svg class="chart" viewBox="0 0 ${W} ${H}">${g}</svg>`;
 }
 
@@ -873,13 +899,9 @@ function renderDieta(){
   const p=media7(hoyISO())??ultimoPeso()??PESO0;
   const O=objetivosDia(); const kcal=O.kcal, prot=O.prot;
 
-  let h=`<div class="tabs">
-    <button class="${tabDieta==='com'?'on':''}" onclick="tabDieta='com';renderDieta()">Comidas</button>
-    <button class="${tabDieta==='num'?'on':''}" onclick="tabDieta='num';renderDieta()">Plan</button>
-    <button class="${tabDieta==='si'?'on':''}" onclick="tabDieta='si';renderDieta()">Sí</button>
-    <button class="${tabDieta==='no'?'on':''}" onclick="tabDieta='no';renderDieta()">No</button>
-    <button class="${tabDieta==='fuera'?'on':''}" onclick="tabDieta='fuera';renderDieta()">Fuera</button>
-  </div>`;
+  const TABS=[['com','Comidas'],['menu','Menú'],['rec','Recetas'],['num','Plan'],['si','Sí'],['no','No'],['fuera','Fuera']];
+  let h=`<div class="tabs">`+TABS.map(([k,n])=>
+    `<button class="${tabDieta===k?'on':''}" onclick="tabDieta='${k}';renderDieta()">${n}</button>`).join('')+`</div>`;
 
   if(tabDieta==='com'){
     const f=hoyISO(), T=totalDia(f), lista=D.comidas[f]||[];
@@ -893,9 +915,13 @@ function renderDieta(){
         <div class="n">de ${prot} g${T.prot>=prot?' · conseguido':''}</div>
         <div class="bar"><i style="width:${pp}%;background:${T.prot>=prot?'var(--green)':'var(--blue)'}"></i></div></div>
     </div>
-    <div class="grid2" style="margin-bottom:14px">
+    <div class="grid2" style="margin-bottom:9px">
       <button class="btn-p" onclick="pedirFoto()">📷  Foto del plato</button>
+      <button class="btn-p" onclick="formTexto()">💬  Describirlo</button>
+    </div>
+    <div class="grid2" style="margin-bottom:14px">
       <button onclick="formComida()">✏️  A mano</button>
+      <button onclick="tabDieta='menu';renderDieta()">🍽  Del menú de hoy</button>
     </div>`;
 
     if(!D.api.key) h+=`<div class="box" style="margin-bottom:12px">Para que la cámara reconozca la comida hace falta una clave de Claude.
@@ -906,7 +932,9 @@ function renderDieta(){
       lista.forEach(m=>{
         h+=`<div class="meal">
           ${m.img?`<img src="${m.img}" alt="">`:`<div style="width:44px;height:44px;flex:none;border-radius:9px;background:var(--s2);display:grid;place-items:center;font-size:17px">${m.src==='ia'?'📷':'🍽'}</div>`}
-          <div class="mi"><div class="mn">${esc(m.n)}</div><div class="mm">${esc(m.t)}${m.src==='ia'?' · estimado por foto':''}</div></div>
+          <div class="mi"><div class="mn">${esc(m.n)}</div>
+            <div class="mm">${esc(m.t)}${({ia:' · foto',txt:' · descrito',rec:' · del menú'})[m.src]||''}</div>
+            ${m.items&&m.items.length?`<div class="mm">${m.items.slice(0,4).map(i=>esc(i.a.replace(/\s*\(.*?\)/g,''))+' '+i.g+' g').join(' · ')}${m.items.length>4?' …':''}</div>`:''}</div>
           <div><div class="mk">${m.kcal}</div><div class="mp">${m.p} g prot.</div></div>
           <button class="xbtn" onclick="borraComida('${m.id}')" aria-label="Borrar">×</button>
         </div>`;
@@ -929,9 +957,14 @@ function renderDieta(){
       h+=`<p class="muted">Media de los últimos ${dias.length} días registrados: <strong>${Math.round(med)} kcal</strong>. Es este número, y no el de un día suelto, el que decide si bajas de peso.</p>`;
     }
 
-    h+=`<div class="box" style="margin-top:16px">La estimación por foto se equivoca típicamente entre un 20 y un 40 %, y falla más con guisos, salsas y aceite. Úsala para llevar el registro sin esfuerzo y para darte cuenta de lo que comes — <strong>no como una medida exacta</strong>. Si un plato lo conoces bien, corrígelo a mano: tu ojo será mejor que la foto.</div>`;
+    h+=`<div class="box" style="margin-top:16px">La foto se equivoca típicamente entre un 20 y un 40 %, y falla más con guisos, salsas y aceite.
+      <strong>Describir el plato con cantidades es bastante más preciso</strong> — y más barato. Con cualquiera de los dos
+      te sale el desglose por ingrediente: toca los gramos que no cuadren y el total se recalcula solo.</div>`;
     $('#v-dieta').innerHTML=h; return;
   }
+
+  if(tabDieta==='menu'){ $('#v-dieta').innerHTML=h+vistaMenu(); return; }
+  if(tabDieta==='rec'){ $('#v-dieta').innerHTML=h+vistaRecetas(); return; }
 
   if(tabDieta==='num'){
     h+=`<div class="grid3" style="margin-bottom:10px">
@@ -939,16 +972,13 @@ function renderDieta(){
       <div class="stat"><div class="l">Proteína</div><div class="v" style="font-size:19px">${prot} g</div><div class="n">innegociable</div></div>
       <div class="stat"><div class="l">Grasa</div><div class="v" style="font-size:19px">70 g</div><div class="n">mínimo</div></div>
     </div>
-    <div class="box g">Ajustado a tu peso actual (${p.toFixed(1)} kg). Los números bajan solos cuando cruces los 98 kg y los 92 kg — a medida que pesas menos, gastas menos.</div>
-    <h3>Un día tipo</h3>
-    <table>
-      <tr><td class="k">Desayuno</td><td>4 huevos revueltos (o 2 huevos + 200 g de claras) · 1 fruta · café solo<br><span class="muted">420 kcal · 38 g prot.</span></td></tr>
-      <tr><td class="k">Comida</td><td>200 g de pollo/ternera/pescado · 250 g de verdura · 150 g de arroz o patata · 1 cucharada de aceite<br><span class="muted">660 kcal · 55 g prot.</span></td></tr>
-      <tr><td class="k">Post-entreno</td><td>Batido de proteína con agua<br><span class="muted">130 kcal · 25 g prot.</span></td></tr>
-      <tr><td class="k">Merienda</td><td>200 g de yogur griego 0 % · 25 g de nueces o almendras crudas<br><span class="muted">340 kcal · 25 g prot.</span></td></tr>
-      <tr><td class="k">Cena</td><td>220 g de pescado o pavo · ensalada grande · 1 cucharada de aceite<br><span class="muted">520 kcal · 48 g prot.</span></td></tr>
-      <tr><td class="k">Total</td><td><strong>2.070 kcal · 191 g de proteína</strong><br><span class="muted">Te sobran ~130 kcal de margen a propósito: los planes sin holgura se rompen.</span></td></tr>
-    </table>
+    <div class="box g">Ajustado a tu peso actual (${p.toFixed(1)} kg). Los números bajan solos cuando cruces los 98, los 92 y los 86 kg — a medida que pesas menos, gastas menos.</div>
+    <h3>Un día tipo · ${DIAS_SEM[diaSel].toLowerCase()}</h3>
+    ${(()=>{ const dm=diaMenu(diaSel); let t='<table>';
+      dm.comidas.forEach((c,j)=>{ t+=`<tr><td class="k">${HUECOS[j][1]}</td><td>${esc(c.r.n)}<br><span class="muted">${c.ing.map(x=>esc(x[0].replace(/\s*\(.*?\)/g,''))+' '+x[1]+' g').join(' · ')}<br>${c.kcal} kcal · ${c.p} g prot.</span></td></tr>`; });
+      t+=`<tr><td class="k">Total</td><td><strong>${dm.kcal} kcal · ${dm.p} g de proteína</strong><br><span class="muted">Objetivo de hoy: ${kcal} kcal y ${prot} g. Las cantidades salen ya ajustadas.</span></td></tr></table>`;
+      return t; })()}
+    <button class="btn-w" style="margin-bottom:12px" onclick="tabDieta='menu';renderDieta()">Ver el menú de los 7 días</button>
     <h3>Cuatro trucos que valen más que cualquier suplemento</h3>
     <div class="card"><ul style="margin:0">
       <li><strong>Proteína primero en cada plato.</strong> Carne o pescado, luego verdura, y el carbohidrato al final.</li>
@@ -1056,6 +1086,27 @@ function renderMas(){
     <input type="file" id="imp" accept=".json" style="display:none" onchange="importar(this)">
   </div>
 
+  ${(()=>{
+    const ks=Object.keys(D.cambios);
+    if(!ks.length && !D.veto.length) return `<h3>Ejercicios</h3><div class="card"><p style="margin:0" class="muted">
+      No has cambiado ningún ejercicio. En cualquier sesión, el botón ⇄ de un ejercicio te propone
+      alternativas del mismo patrón con el material que tienes.</p></div>`;
+    let t='<h3>Ejercicios cambiados</h3>';
+    if(ks.length){ t+='<div class="card" style="padding:4px 0"><table>';
+      ks.sort().forEach(k=>{ const m=k.match(/^d(\d+)v([ABC])e(\d+)$/); if(!m) return;
+        const orig=PLAN[+m[1]].v[m[2]].ex[+m[3]];
+        t+=`<tr><td class="k">${esc(D.cambios[k])}<br><span class="muted">día ${m[1]} · variante ${m[2]} · en lugar de ${esc(limpiaNombre(orig?orig.n:'—'))}</span></td>
+          <td style="text-align:right"><button class="btn-s" onclick="deshaceEj(${+m[1]},'${m[2]}',${+m[3]})">Deshacer</button></td></tr>`; });
+      t+='</table></div><button class="btn-w" style="margin-bottom:11px" onclick="reponEj()">Deshacer todos los cambios</button>';
+    } else t+='<div class="card"><p style="margin:0" class="muted">Ninguno ahora mismo.</p></div>';
+    if(D.veto.length){
+      t+='<h3>Ejercicios descartados</h3><div class="card" style="padding:4px 0"><table>';
+      D.veto.forEach(v=>{ t+=`<tr><td class="k">${esc(v)}</td><td style="text-align:right">
+        <button class="btn-s" onclick="quitaVeto('${esc(v).replace(/'/g,'')}')">Recuperar</button></td></tr>`; });
+      t+='</table></div><p class="muted">No se te vuelven a proponer como alternativa.</p>';
+    }
+    return t; })()}
+
   <h3>Ajuste del ciclo</h3>
   <div class="card">
     <p style="margin:0 0 10px">Hoy es el <strong>día ${st.dia} del ciclo ${st.ciclo}</strong>. Si se ha descuadrado, muévelo:</p>
@@ -1066,7 +1117,7 @@ function renderMas(){
   </div>
 
   <div class="box r" style="margin-top:22px">Este plan no sustituye el consejo de un médico ni de un dietista-nutricionista colegiado. Hazte una revisión antes de empezar y consulta si aparece dolor, mareo o cualquier síntoma raro.</div>
-  <p class="muted" style="text-align:center;margin:18px 0 6px">Plan de Juande · 108 → 85 kg · boda de febrero de 2027</p>`;
+  <p class="muted" style="text-align:center;margin:18px 0 6px">Plan de Juande · 108 → 82,5 kg · boda de febrero de 2027</p>`;
   $('#v-mas').innerHTML=h;
 }
 function records(){
@@ -1075,10 +1126,10 @@ function records(){
     const dia=+k.split('d')[1], ciclo=+k.slice(1).split('d')[0];
     const P=PLAN[dia]; if(!P) return;
     const V=P.v[variante(ciclo)]; if(!V) return;
-    V.ex.forEach((x,i)=>{
+    exDia(dia,variante(ciclo)).forEach((x,i)=>{
       const le=L['e'+i]; if(!le||!le.sets) return;
       le.sets.forEach(s=>{ if(!s||!s.w||!s.r) return;
-        const nm=x.n.replace(/^SS\d · /,'');
+        const nm=(le.n||x.n).replace(/^SS\d · /,'');
         if(!best[nm]||s.w>best[nm].w||(s.w===best[nm].w&&s.r>best[nm].r)) best[nm]={n:nm,w:s.w,r:s.r};
       });
     });
@@ -1107,6 +1158,150 @@ function importar(inp){
 /* ══════════════════ FICHAS DE EJERCICIO ══════════════════ */
 const g=(k,t,s,ej,x,n,y)=>({k,t,s,e:ej,x,n,y});
 const GUIA=[
+g('flexiones inclinadas','Flexiones inclinadas · manos elevadas',
+ 'Manos apoyadas en el borde de una mesa, una silla o el sofá, cuerpo en línea recta y pies atrás.',
+ 'Baja el pecho hasta rozar el apoyo con los codos a unos 45° del cuerpo y empuja hasta estirar los brazos.',
+ 'Hundir la cadera y apoyar las manos en algo que se pueda mover.',
+ 'Lo mismo que en la flexión normal pero con menos peso encima: cuanto más alto el apoyo, más fácil. Es el escalón para llegar a las flexiones en el suelo.',
+ 'flexiones inclinadas manos elevadas tecnica'),
+g('flexiones diamante','Flexiones diamante',
+ 'En posición de flexión con las manos juntas bajo el pecho, índices y pulgares formando un triángulo.',
+ 'Baja el pecho hacia las manos con los codos pegados al cuerpo, no abiertos. Sube empujando el suelo hasta estirar los brazos, sin sacar la cadera.',
+ 'Abrir los codos (se convierte en una flexión normal) y dejar caer la cadera.',
+ 'El tríceps a reventar y el pecho por dentro. Es bastante más dura que la flexión normal: si no salen 8, hazlas con las rodillas apoyadas.',
+ 'flexiones diamante tecnica'),
+g('flexiones declinadas','Flexiones declinadas · pies elevados',
+ 'Manos en el suelo a la anchura de los hombros y los pies subidos a una silla o al sofá.',
+ 'Baja el pecho hasta rozar el suelo manteniendo el cuerpo en línea recta desde la cabeza hasta los talones. Sube empujando.',
+ 'Hundir la cadera, y subir demasiado los pies hasta convertirlo en un press vertical con la cara mirando al suelo.',
+ 'Más carga en la parte alta del pecho y en el hombro. Es el paso siguiente cuando las flexiones normales se te quedan cortas.',
+ 'flexiones declinadas pies elevados tecnica'),
+g('flexiones arqueras','Flexiones arqueras',
+ 'Posición de flexión con las manos mucho más abiertas de lo normal.',
+ 'Baja desplazando el peso hacia un brazo, que se flexiona, mientras el otro se queda casi estirado como el arco de un arquero. Sube y alterna el lado.',
+ 'Girar el tronco al bajar y doblar el brazo que debe quedarse estirado.',
+ 'Casi todo el trabajo en un solo lado del pecho. Es el escalón previo a la flexión a una mano.',
+ 'flexiones arqueras archer push up tecnica'),
+g('press cerrado','Press cerrado en suelo',
+ 'Tumbado en la esterilla, rodillas dobladas, mancuernas juntas sobre el pecho con las palmas mirándose.',
+ 'Baja las mancuernas juntas hasta que los codos toquen el suelo, pegados al costado. Empuja hacia arriba sin separarlas.',
+ 'Abrir los codos hacia fuera y despegar la lumbar del suelo.',
+ 'Tríceps y parte interna del pecho. Al tocar el suelo con el codo tienes una pausa natural: aprovéchala, quita la inercia.',
+ 'press cerrado mancuernas suelo triceps'),
+g('press militar sentado','Press militar sentado',
+ 'Sentado en una silla con respaldo, espalda apoyada, mancuernas a la altura de las orejas y palmas al frente.',
+ 'Empuja hacia arriba hasta estirar los brazos sin bloquear del todo el codo. Baja controlando hasta la altura de la oreja.',
+ 'Arquear la lumbar despegándola del respaldo y bajar solo medio recorrido.',
+ 'Hombro puro. Al estar sentado no puedes ayudarte con las piernas, así que mueves menos peso que de pie: es normal.',
+ 'press militar sentado mancuernas tecnica'),
+g('z press','Z press en el suelo',
+ 'Sentado en el suelo con las piernas estiradas y abiertas, tronco vertical, mancuernas a la altura de los hombros.',
+ 'Empuja hacia arriba manteniendo el tronco completamente recto, sin dejarte caer hacia atrás. Baja despacio.',
+ 'Redondear la espalda, inclinarte atrás para coger impulso y arquear la lumbar al final del empuje.',
+ 'Hombro, y un trabajo enorme de core y de la parte alta de la espalda para no caerte. Baja el peso respecto al press de pie.',
+ 'z press suelo mancuernas tecnica'),
+g('remo con dos mancuernas','Remo con dos mancuernas',
+ 'De pie, pies a la anchura de las caderas, cadera echada atrás hasta que el tronco quede a unos 45°, espalda plana, mancuernas colgando.',
+ 'Tira de las dos mancuernas hacia la cadera juntando las escápulas, con los codos pegados al cuerpo. Baja controlando hasta estirar del todo.',
+ 'Subir el tronco a cada repetición (lo convierte en un encogimiento) y tirar con los brazos en vez de con la espalda.',
+ 'Dorsal y parte media de la espalda. Aprieta un segundo arriba, como si sujetaras un lápiz entre los omóplatos.',
+ 'remo con mancuernas dos manos tecnica'),
+g('remo invertido','Remo invertido bajo la mesa',
+ 'Tumbado boca arriba debajo de una mesa sólida, agarrando el borde con las manos a la anchura de los hombros, cuerpo recto y talones en el suelo.',
+ 'Tira del pecho hacia el borde de la mesa manteniendo el cuerpo en línea. Baja controlando hasta estirar los brazos.',
+ 'Sacar la cadera hacia abajo y no llegar a tocar con el pecho.',
+ 'Toda la espalda y los bíceps. Cuanto más horizontal esté tu cuerpo, más duro. Para hacerlo fácil, dobla las rodillas.',
+ 'remo invertido mesa australian pull up'),
+g('peso muerto sumo','Peso muerto sumo con mancuernas',
+ 'Pies bastante más abiertos que los hombros, punteras hacia fuera, las mancuernas entre las piernas.',
+ 'Baja empujando las rodillas hacia fuera y la cadera abajo, con el pecho alto. Sube empujando el suelo y apretando el glúteo arriba.',
+ 'Juntar las rodillas, redondear la espalda y tirar con los brazos.',
+ 'Glúteo y aductor mucho más que en el peso muerto normal. La espalda debe quedar tensa pero sin dolor.',
+ 'peso muerto sumo mancuernas tecnica'),
+g('buenos dias','Buenos días con mancuerna',
+ 'De pie, una mancuerna sujeta contra la parte alta del pecho con las dos manos, pies a la anchura de las caderas y rodillas ligeramente flexionadas.',
+ 'Echa la cadera atrás bajando el tronco hasta quedar casi paralelo al suelo, con la espalda plana. Sube apretando el glúteo.',
+ 'Doblar las rodillas hasta convertirlo en sentadilla y redondear la espalda baja.',
+ 'Estiramiento en los isquiotibiales y mucha tensión en toda la espalda. Empieza ligero: pesa poco y se nota mucho.',
+ 'buenos dias good morning tecnica'),
+g('swing','Swing con mancuerna',
+ 'Pies algo más abiertos que los hombros, una mancuerna sujeta con las dos manos colgando entre las piernas.',
+ 'Lleva la mancuerna atrás entre las piernas con la cadera echada hacia atrás, y proyéctala al frente estirando la cadera de golpe. Los brazos solo acompañan. Sube hasta la altura del pecho.',
+ 'Hacerlo como una sentadilla y levantar el peso con los brazos u hombros en vez de con la cadera.',
+ 'Un latigazo de glúteo e isquios. Es un ejercicio de cadera explosivo, no de hombro. Sube mucho las pulsaciones.',
+ 'swing con mancuerna tecnica'),
+g('sentadilla sumo','Sentadilla sumo con mancuerna',
+ 'Pies muy abiertos, punteras hacia fuera, una mancuerna colgando entre las piernas sujeta con las dos manos.',
+ 'Baja recto entre los talones, con las rodillas empujando hacia fuera y el pecho alto. Sube apretando el glúteo.',
+ 'Que las rodillas se metan hacia dentro y quedarte a medio recorrido.',
+ 'Cara interna del muslo y glúteo. Si notas los cuádriceps solo por delante, abre más los pies.',
+ 'sentadilla sumo mancuerna tecnica'),
+g('zancada caminando','Zancada caminando',
+ 'De pie con una mancuerna en cada mano a los costados, tronco erguido.',
+ 'Da un paso largo al frente y baja hasta que la rodilla de atrás casi toque el suelo. Empuja con el talón de delante y trae el pie de atrás para dar el siguiente paso.',
+ 'Dar pasos cortos (la rodilla se te va delante del pie), inclinar el tronco y tocar el suelo con la rodilla de golpe.',
+ 'Glúteo y cuádriceps de la pierna de delante, y bastante equilibrio. Si no tienes sitio, altérnalas en el mismo punto.',
+ 'zancadas caminando mancuernas tecnica'),
+g('sentadilla con salto','Sentadilla con salto',
+ 'De pie, pies a la anchura de los hombros, sin peso, brazos libres.',
+ 'Baja a media sentadilla y salta hacia arriba estirando todo el cuerpo. Cae con el pie completo y las rodillas blandas, encadenando la siguiente.',
+ 'Caer con las piernas rígidas o con las rodillas hacia dentro, y bajar demasiado en cada repetición.',
+ 'Piernas ardiendo y las pulsaciones por las nubes en pocas repeticiones. Si notas la rodilla, cambia por sentadilla normal rápida.',
+ 'sentadilla con salto tecnica jump squat'),
+g('dead bug','Dead bug',
+ 'Tumbado boca arriba, brazos estirados hacia el techo y caderas y rodillas dobladas a 90°, con la lumbar pegada al suelo.',
+ 'Estira a la vez el brazo derecho por detrás de la cabeza y la pierna izquierda hacia delante, sin que la lumbar se despegue. Vuelve y cambia de lado.',
+ 'Que se levante la zona lumbar (es el fallo que anula el ejercicio) y hacerlo rápido.',
+ 'El abdomen profundo trabajando para que la espalda no se mueva. Si se te despega la lumbar, baja menos la pierna.',
+ 'dead bug tecnica core'),
+g('giro ruso','Giro ruso con mancuerna',
+ 'Sentado en la esterilla, rodillas dobladas, tronco inclinado hacia atrás unos 45°, una mancuerna con las dos manos frente al pecho.',
+ 'Gira el tronco llevando la mancuerna a un lado hasta rozar el suelo y luego al otro, moviendo hombros y pecho, no solo los brazos.',
+ 'Mover únicamente los brazos, redondear la espalda y ir tan rápido que el peso te lleve a ti.',
+ 'Los oblicuos. Para hacerlo más duro, levanta los pies del suelo.',
+ 'giro ruso russian twist tecnica'),
+g('toque de hombro','Plancha con toque de hombro',
+ 'En posición de plancha alta (brazos estirados), pies algo más abiertos de lo normal para tener base.',
+ 'Levanta una mano y toca el hombro contrario sin que la cadera se mueva ni un centímetro. Vuelve y alterna.',
+ 'Balancear la cadera de lado a lado y juntar mucho los pies.',
+ 'El abdomen entero luchando contra la rotación. La clave no son los brazos: es que la cadera se quede quieta.',
+ 'plancha toque de hombro tecnica'),
+g('elevaciones de piernas','Elevaciones de piernas tumbado',
+ 'Tumbado boca arriba, manos bajo los glúteos o a los lados, piernas estiradas y juntas.',
+ 'Sube las piernas rectas hasta la vertical y bájalas despacio hasta justo antes de tocar el suelo, sin que la lumbar se despegue.',
+ 'Despegar la lumbar al bajar y dejar caer las piernas de golpe.',
+ 'El abdomen bajo. Si te molesta la espalda, dobla un poco las rodillas o baja menos.',
+ 'elevaciones de piernas tumbado abdominales tecnica'),
+g('curl concentrado','Curl concentrado',
+ 'Sentado en una silla, piernas abiertas, el codo del brazo que trabaja apoyado en la cara interna del muslo, mancuerna colgando.',
+ 'Sube la mancuerna hasta el hombro sin despegar el codo del muslo y baja despacio hasta estirar del todo el brazo.',
+ 'Mover el codo, ayudarte con el tronco y no estirar el brazo abajo.',
+ 'El bíceps aislado como en ningún otro ejercicio. Peso ligero y bajada lenta.',
+ 'curl concentrado tecnica'),
+g('patada de triceps','Patada de tríceps',
+ 'Tronco inclinado hacia delante con la espalda plana, el brazo pegado al costado y el codo doblado a 90°.',
+ 'Estira el brazo hacia atrás llevando la mancuerna hasta la altura de la cadera sin mover el codo. Aprieta un segundo y vuelve.',
+ 'Mover el hombro en lugar del codo y usar demasiado peso balanceando el brazo.',
+ 'La parte de atrás del brazo, sobre todo al final del recorrido. Es de aislamiento: poco peso y muchas repeticiones.',
+ 'patada de triceps mancuerna tecnica'),
+g('thruster','Thruster con mancuernas',
+ 'De pie con las mancuernas apoyadas en los hombros, palmas mirándose, pies a la anchura de los hombros.',
+ 'Haz una sentadilla completa y, al subir, aprovecha el impulso de las piernas para empujar las mancuernas por encima de la cabeza en un solo movimiento continuo.',
+ 'Separar la sentadilla del empuje (pierdes el impulso) y arquear la lumbar arriba.',
+ 'Todo el cuerpo a la vez y las pulsaciones disparadas. Es el ejercicio que más cansa de todo el plan por repetición.',
+ 'thruster con mancuernas tecnica'),
+g('man maker','Man maker',
+ 'De pie con una mancuerna en cada mano, apoyadas en el suelo delante de ti.',
+ 'Plancha alta agarrando las mancuernas, una flexión, un remo con cada brazo, salta con los pies hacia las manos y termina de pie con un empuje sobre la cabeza. Eso es una repetición.',
+ 'Sacar la cadera en la flexión y girar el cuerpo al remar.',
+ 'Absolutamente todo. Cinco repeticiones bien hechas son un entrenamiento entero: no corras, mantén la forma.',
+ 'man maker mancuernas tecnica'),
+g('rodillas altas','Rodillas altas en el sitio',
+ 'De pie, tronco erguido, brazos doblados a 90°.',
+ 'Corre en el sitio subiendo las rodillas hasta la altura de la cadera, cayendo sobre la parte delantera del pie y con el abdomen apretado.',
+ 'Inclinar el tronco hacia atrás y subir poco las rodillas.',
+ 'Pulsaciones arriba enseguida y trabajo de gemelo y flexores de cadera. Es la alternativa a la comba cuando no puedes saltar por el ruido.',
+ 'rodillas altas en el sitio tecnica'),
 g('peso muerto rumano a una pierna','Peso muerto rumano a una pierna',
  'De pie, una mancuerna en la mano contraria a la pierna de apoyo. Rodilla de apoyo con una flexión mínima.',
  'Baja la mancuerna llevando la pierna libre hacia atrás como un balancín, manteniendo caderas y hombros cuadrados con el suelo. Sube apretando el glúteo.',
@@ -1349,30 +1544,204 @@ g('comba','Comba',
  'saltar a la comba tecnica principiantes')
 ];
 const norm = s => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/^ss\d\s*\u00b7\s*/,'');
-function buscaGuia(n){ const q=norm(n); return GUIA.find(x=>q.includes(x.k)) || null; }
+/* nombres del plan que no coinciden con ninguna clave */
+const ALIASEJ={'press de hombro':'press militar'};
+function buscaGuia(n){ const q=norm(n);
+  const a=Object.keys(ALIASEJ).find(k=>q.includes(k));
+  if(a) return GUIA.find(x=>x.k===ALIASEJ[a]) || null;
+  return GUIA.find(x=>q.includes(x.k)) || (q.length>3?GUIA.find(x=>norm(x.t).includes(q)):null) || null; }
+
+/* ══════════════════ CATÁLOGO: PATRÓN, NIVEL Y MATERIAL ══════════════════
+   Cada ejercicio de la guía, clasificado. Es lo que permite proponer alternativas
+   que trabajan lo mismo y que puedes hacer con lo que tienes en casa.
+   [patrón, nivel 1-3, material] */
+const PATRONES={emphor:'Empuje horizontal',empver:'Empuje vertical',tirhor:'Tirón · espalda',
+  rodilla:'Dominante de rodilla',cadera:'Bisagra de cadera',core:'Core',hombro:'Hombro',
+  triceps:'Tríceps',biceps:'Bíceps',gemelo:'Gemelo',metab:'Metabólico'};
+const NIVELES=['Fácil','Medio','Exigente'];
+/* lo que tienes: mancuernas, comba, esterilla, rueda y una silla */
+const MATERIAL=['peso corporal','mancuernas','comba','rueda','silla'];
+const EJINFO={
+ 'peso muerto rumano a una pierna':['cadera',3,'mancuernas'],'peso muerto rumano':['cadera',2,'mancuernas'],
+ 'peso muerto sumo':['cadera',2,'mancuernas'],'peso muerto':['cadera',3,'barra'],
+ 'buenos dias':['cadera',2,'mancuernas'],'swing':['cadera',3,'mancuernas'],
+ 'hip thrust':['cadera',2,'mancuernas'],'puente de gluteo':['cadera',1,'peso corporal'],
+ 'sentadilla goblet':['rodilla',2,'mancuernas'],'sentadilla frontal':['rodilla',3,'barra'],
+ 'sentadilla sumo':['rodilla',2,'mancuernas'],'sentadilla isometrica':['rodilla',1,'peso corporal'],
+ 'sentadilla dividida':['rodilla',2,'peso corporal'],'zancada bulgara':['rodilla',3,'mancuernas'],
+ 'zancada caminando':['rodilla',2,'mancuernas'],'zancada':['rodilla',2,'mancuernas'],
+ 'step-up':['rodilla',2,'silla'],'gemelo':['gemelo',1,'mancuernas'],
+ 'flexiones inclinadas':['emphor',1,'peso corporal'],
+ 'flexiones declinadas':['emphor',3,'peso corporal'],'flexiones arqueras':['emphor',3,'peso corporal'],
+ 'flexiones':['emphor',2,'peso corporal'],'floor press':['emphor',2,'mancuernas'],
+ 'aperturas':['emphor',2,'mancuernas'],
+ 'press militar sentado':['empver',1,'mancuernas'],'press arnold':['empver',2,'mancuernas'],
+ 'press militar':['empver',2,'mancuernas'],'z press':['empver',3,'mancuernas'],
+ 'push press':['empver',3,'mancuernas'],
+ 'remo con dos mancuernas':['tirhor',2,'mancuernas'],'remo invertido':['tirhor',2,'peso corporal'],
+ 'remo renegado':['tirhor',3,'mancuernas'],'remo con barra':['tirhor',3,'barra'],
+ 'remo inclinado':['tirhor',2,'mancuernas'],'remo':['tirhor',2,'mancuernas'],
+ 'pull-over':['tirhor',2,'mancuernas'],
+ 'elevaciones laterales':['hombro',1,'mancuernas'],'pajaros':['hombro',1,'mancuernas'],
+ 'encogimientos':['hombro',1,'mancuernas'],
+ 'flexiones diamante':['triceps',3,'peso corporal'],'press cerrado':['triceps',2,'mancuernas'],
+ 'fondos':['triceps',3,'silla'],'extension de triceps':['triceps',2,'mancuernas'],
+ 'patada de triceps':['triceps',1,'mancuernas'],
+ 'curl concentrado':['biceps',1,'mancuernas'],'curl martillo':['biceps',1,'mancuernas'],
+ 'curl':['biceps',1,'mancuernas'],
+ 'rueda abdominal':['core',3,'rueda'],'plancha lateral':['core',2,'peso corporal'],
+ 'plancha':['core',1,'peso corporal'],'hollow':['core',2,'peso corporal'],
+ 'superman':['core',1,'peso corporal'],'dead bug':['core',1,'peso corporal'],
+ 'giro ruso':['core',2,'mancuernas'],'toque de hombro':['core',2,'peso corporal'],
+ 'elevaciones de piernas':['core',2,'peso corporal'],
+ 'escaladores':['metab',2,'peso corporal'],'burpee':['metab',3,'peso corporal'],
+ 'sentadilla con salto':['metab',3,'peso corporal'],'rodillas altas':['metab',1,'peso corporal'],
+ 'cargadas':['metab',3,'mancuernas'],'thruster':['metab',3,'mancuernas'],
+ 'man maker':['metab',3,'mancuernas'],'comba':['metab',2,'comba']
+};
+function limpiaNombre(n){ return n.replace(/^SS\d · /,''); }
+function infoEj(n){ const G=buscaGuia(limpiaNombre(n)); return G&&EJINFO[G.k]?{G:G,i:EJINFO[G.k]}:null; }
+/* alternativas del mismo patrón, con tu material, sin las descartadas ni las que ya haces hoy */
+function alternativas(n,enSesion){
+  const I=infoEj(n); if(!I) return [];
+  const fuera=(enSesion||[]).map(x=>norm(limpiaNombre(x)));
+  return GUIA.filter(o=>{
+    const inf=EJINFO[o.k];
+    if(!inf || o.k===I.G.k) return false;
+    if(inf[0]!==I.i[0]) return false;
+    if(MATERIAL.indexOf(inf[2])<0) return false;
+    if(D.veto.indexOf(o.t)>=0) return false;
+    return !fuera.some(f=>f.includes(o.k));
+  }).sort((a,b)=>Math.abs(EJINFO[a.k][1]-I.i[1])-Math.abs(EJINFO[b.k][1]-I.i[1]));
+}
+/* el mismo patrón, un escalón más fácil o más difícil */
+function vecino(n,dir){
+  const I=infoEj(n); if(!I) return null;
+  const L=alternativas(n).filter(o=>dir<0?EJINFO[o.k][1]<I.i[1]:EJINFO[o.k][1]>I.i[1]);
+  return L.length?L[0]:null;
+}
+
+/* ══════════════════ CAMBIOS DE EJERCICIO ══════════════════ */
+function claveSw(dia,vr,i){ return 'd'+dia+'v'+vr+'e'+i; }
+/* la sesión con los cambios que hayas guardado ya aplicados */
+function exDia(dia,vr){
+  return PLAN[dia].v[vr].ex.map((x,i)=>{
+    const n=D.cambios[claveSw(dia,vr,i)];
+    if(!n) return x;
+    const pref=(x.n.match(/^SS\d · /)||[''])[0];
+    return {n:pref+n, s:x.s, r:x.r, nt:'', sw:x.n};
+  });
+}
+function nombreEj(i){
+  const st=estado(VER);
+  const x=exDia(st.dia,variante(st.ciclo))[i];
+  return x?x.n:'';
+}
+function cambiaEjercicio(dia,vr,i){
+  const EX=exDia(dia,vr), x=EX[i], orig=PLAN[dia].v[vr].ex[i];
+  const nombre=limpiaNombre(x.n), I=infoEj(nombre);
+  const alts=alternativas(nombre, EX.map(e=>e.n));
+
+  let h=`<p class="sh-t">Cambiar ejercicio</p>
+  <p class="sh-s">${esc(nombre)}${I?' · '+PATRONES[I.i[0]].toLowerCase()+' · '+NIVELES[I.i[1]-1].toLowerCase():''}</p>`;
+
+  if(x.sw) h+=`<div class="gbox ok"><div class="gt">Ya está cambiado</div>
+    <p>Estás haciendo <b>${esc(nombre)}</b> en lugar de <b>${esc(limpiaNombre(orig.n))}</b>.</p>
+    <button class="btn-s" style="margin-top:9px" onclick="deshaceEj(${dia},'${vr}',${i})">Volver al original</button></div>`;
+
+  if(!I){
+    h+=`<div class="gbox"><p>Este bloque combina varios ejercicios o es de cardio, así que no tiene
+      un cambio directo. Si hoy no puedes hacerlo, cámbialo por otro día del ciclo o usa el botón de
+      mover el ciclo un día.</p></div>`;
+  }else if(!alts.length){
+    h+=`<div class="gbox"><p>No hay otra alternativa de <b>${esc(PATRONES[I.i[0]].toLowerCase())}</b>
+      que puedas hacer con mancuernas, comba, esterilla y una silla. Si lo descartas, quedará el hueco vacío.</p></div>`;
+  }else{
+    h+=`<h3 style="margin-top:4px">Alternativas · mismo patrón</h3>`;
+    alts.slice(0,6).forEach(o=>{
+      const inf=EJINFO[o.k];
+      h+=`<div class="slot" style="display:flex;gap:10px;align-items:center">
+        <div style="flex:1;min-width:0" onclick="fichaGuia('${o.k}')">
+          <div class="sn">${esc(o.t)}</div>
+          <div class="sm">${NIVELES[inf[1]-1]} · ${inf[2]} · toca para ver la técnica</div>
+        </div>
+        <button class="btn-s btn-p" onclick="eligeEj(${dia},'${vr}',${i},'${esc(o.t).replace(/'/g,'')}')">Cambiar</button>
+      </div>`;
+    });
+    h+=`<p class="muted">Se mantienen las series y las repeticiones del hueco (${orig.s>1?orig.s+' × ':''}${esc(orig.r)}).
+      El cambio se guarda para el <strong>día ${dia}, variante ${vr}</strong>: la próxima vez que toque esta sesión ya saldrá cambiado.</p>`;
+  }
+
+  if(I) h+=`<button class="btn-w" style="margin:6px 0 8px" onclick="vetaEj('${esc(I.G.t).replace(/'/g,'')}',${dia},'${vr}',${i})">No quiero volver a hacer ${esc(I.G.t)}</button>`;
+  h+=`<button class="btn-p btn-w" onclick="cerrar()">Cerrar</button>`;
+  abre(h);
+}
+function eligeEj(dia,vr,i,n){
+  D.cambios[claveSw(dia,vr,i)]=n; save(); vibra(18);
+  cerrar(); renderHoy(); renderMas(); toast('Cambiado por '+n);
+}
+function deshaceEj(dia,vr,i){
+  delete D.cambios[claveSw(dia,vr,i)]; save();
+  cerrar(); renderHoy(); renderMas(); toast('Vuelto al original');
+}
+function vetaEj(t,dia,vr,i){
+  if(D.veto.indexOf(t)<0) D.veto.push(t);
+  save();
+  const alts=alternativas(t, exDia(dia,vr).map(e=>e.n));
+  if(alts.length) eligeEj(dia,vr,i,alts[0].t);
+  else { cerrar(); renderHoy(); renderMas(); toast('Descartado'); }
+}
+function quitaVeto(t){ D.veto=D.veto.filter(x=>x!==t); save(); renderMas(); toast('Vuelve a estar disponible'); }
+function reponEj(k){ /* deshace todos los cambios */
+  if(!confirm('Se deshacen todos los cambios de ejercicio y vuelve el plan original. ¿Seguro?')) return;
+  D.cambios={}; save(); renderTodo(); toast('Plan original restaurado');
+}
 
 /* ══════════════════ MODAL ══════════════════ */
 function abre(html){ $('#sheet').innerHTML='<div class="grab"></div>'+html; $('#modal').classList.add('on');
   document.body.style.overflow='hidden'; $('#sheet').scrollTop=0; }
 function cerrar(){ $('#modal').classList.remove('on'); document.body.style.overflow=''; $('#sheet').innerHTML=''; }
 
-function fichaEjercicio(dia,vr,i){
-  const x=PLAN[dia].v[vr].ex[i], G=buscaGuia(x.n);
-  let h=`<p class="sh-t">${esc(x.n)}</p><p class="sh-s">${x.s>1?x.s+' × ':''}${esc(x.r)}${x.nt?' · '+esc(x.nt):''}</p>`;
-  if(!G){
-    h+=`<div class="gbox"><p>Este bloque no tiene ficha individual porque combina varios ejercicios. Abre la ficha de cada movimiento desde los días de fuerza.</p></div>`;
-  }else{
-    h+=`<div class="vid" id="vidBox">
-      <button class="btn-p" onclick="cargaVideo('${esc(G.y).replace(/'/g,'')}')">▶  Ver vídeo</button>
-    </div>
-    <a class="btn btn-gh btn-w" style="display:block;text-align:center;text-decoration:none;margin-bottom:14px"
-       href="https://www.youtube.com/results?search_query=${encodeURIComponent(G.y)}" target="_blank" rel="noopener">Abrir búsqueda en YouTube</a>
-    <div class="gbox"><div class="gt">Posición de partida</div><p>${esc(G.s)}</p></div>
-    <div class="gbox ok"><div class="gt">Ejecución</div><p>${esc(G.e)}</p></div>
-    <div class="gbox err"><div class="gt">Errores típicos</div><p>${esc(G.x)}</p></div>
-    <div class="gbox"><div class="gt">Qué debes notar</div><p>${esc(G.n)}</p></div>`;
+function cuerpoGuia(G){
+  const inf=EJINFO[G.k];
+  let h='';
+  if(inf) h+=`<div class="row" style="gap:6px;flex-wrap:wrap;margin-bottom:12px">
+    <span class="pill p-f">${esc(PATRONES[inf[0]])}</span>
+    <span class="pill p-r">${NIVELES[inf[1]-1]}</span>
+    <span class="pill p-r">${esc(inf[2])}</span></div>`;
+  h+=`<div class="vid" id="vidBox">
+    <button class="btn-p" onclick="cargaVideo('${esc(G.y).replace(/'/g,'')}')">▶  Ver vídeo</button>
+  </div>
+  <a class="btn btn-gh btn-w" style="display:block;text-align:center;text-decoration:none;margin-bottom:14px"
+     href="https://www.youtube.com/results?search_query=${encodeURIComponent(G.y)}" target="_blank" rel="noopener">Abrir búsqueda en YouTube</a>
+  <div class="gbox"><div class="gt">Posición de partida</div><p>${esc(G.s)}</p></div>
+  <div class="gbox ok"><div class="gt">Ejecución</div><p>${esc(G.e)}</p></div>
+  <div class="gbox err"><div class="gt">Errores típicos</div><p>${esc(G.x)}</p></div>
+  <div class="gbox"><div class="gt">Qué debes notar</div><p>${esc(G.n)}</p></div>`;
+  const f=vecino(G.t,-1), d=vecino(G.t,1);
+  if(f||d){
+    h+=`<h3>Subir o bajar el listón</h3><div class="grid2" style="margin-bottom:10px">
+      ${f?`<button onclick="fichaGuia('${f.k}')">↓  ${esc(f.t)}</button>`:'<div></div>'}
+      ${d?`<button onclick="fichaGuia('${d.k}')">↑  ${esc(d.t)}</button>`:'<div></div>'}</div>
+    <p class="muted">Mismo patrón, un escalón más fácil o más exigente. Tocando ves su técnica.</p>`;
   }
-  h+=`<button class="btn-p btn-w" style="margin-top:6px" onclick="cerrar()">Cerrar</button>`;
+  return h;
+}
+function fichaEjercicio(dia,vr,i){
+  const x=exDia(dia,vr)[i], G=buscaGuia(limpiaNombre(x.n));
+  let h=`<p class="sh-t">${esc(x.n)}</p><p class="sh-s">${x.s>1?x.s+' × ':''}${esc(x.r)}${x.nt?' · '+esc(x.nt):''}${x.sw?' · en lugar de '+esc(x.sw):''}</p>`;
+  h+= G ? cuerpoGuia(G)
+        : `<div class="gbox"><p>Este bloque no tiene ficha individual porque combina varios ejercicios. Abre la ficha de cada movimiento desde los días de fuerza.</p></div>`;
+  h+=`<div class="grid2" style="margin-top:12px">
+    <button class="btn-p" onclick="cambiaEjercicio(${dia},'${vr}',${i})">Cambiar por otro</button>
+    <button onclick="cerrar()">Cerrar</button></div>`;
+  abre(h);
+}
+/* ficha suelta, desde el catálogo o desde las alternativas */
+function fichaGuia(k){
+  const G=GUIA.find(g=>g.k===k); if(!G) return;
+  let h=`<p class="sh-t">${esc(G.t)}</p><p class="sh-s">Ficha del catálogo</p>`+cuerpoGuia(G);
+  h+=`<button class="btn-p btn-w" style="margin-top:12px" onclick="cerrar()">Cerrar</button>`;
   abre(h);
 }
 function cargaVideo(q){
@@ -1381,32 +1750,447 @@ function cargaVideo(q){
 }
 
 /* ══════════════════ REGISTRO DE COMIDA ══════════════════ */
+/* ══════════════════ ALIMENTOS ══════════════════
+   [nombre, kcal/100 g, proteína g/100 g, categoría, unidad?, gramos por unidad?]
+   Carnes, pescados, arroz y pasta van EN CRUDO: es como se pesa al cocinar. */
 const ALIM=[
-['Pechuga de pollo a la plancha',165,31],['Pavo a la plancha',135,29],['Ternera magra',180,27],
-['Solomillo de cerdo',143,26],['Lomo de cerdo',160,26],['Huevo entero (1 ud, 60 g)',78,6.3],
-['Clara de huevo (100 g)',52,11],['Merluza',90,18],['Bacalao fresco',82,18],['Lubina',97,19],
-['Salmón',208,20],['Atún al natural (lata)',108,24],['Sardinas',208,25],['Gambas',99,24],
-['Pulpo',82,15],['Mejillones',86,12],['Calamar a la plancha',92,16],['Jamón ibérico',250,43],
-['Jamón serrano',241,31],['Lomo embuchado',180,35],['Cecina',245,39],['Fiambre de pavo',105,17],
-['Yogur griego 0 %',59,10],['Queso fresco batido 0 %',47,8],['Requesón',98,11],['Leche desnatada',35,3.4],
-['Proteína de suero (1 cazo, 30 g)',120,24],['Lentejas cocidas',116,9],['Garbanzos cocidos',164,9],
-['Alubias cocidas',127,9],['Arroz blanco cocido',130,2.7],['Arroz integral cocido',111,2.6],
-['Patata cocida',87,2],['Boniato asado',90,2],['Pasta cocida',158,6],['Avena (copos, seco)',389,17],
-['Pan blanco',265,9],['Pan integral',247,13],['Tomate',18,0.9],['Lechuga',15,1.4],
-['Pepino',16,0.7],['Pimiento',31,1],['Cebolla',40,1.1],['Calabacín',17,1.2],
-['Brócoli',34,2.8],['Judías verdes',31,1.8],['Espinacas',23,2.9],['Champiñones',22,3.1],
-['Berenjena',25,1],['Zanahoria',41,0.9],['Manzana',52,0.3],['Plátano',89,1.1],
-['Naranja',47,0.9],['Fresas',32,0.7],['Sandía',30,0.6],['Melón',34,0.8],
-['Kiwi',61,1.1],['Arándanos',57,0.7],['Aguacate',160,2],['Aceite de oliva (1 cda, 10 g)',90,0],
-['Almendras crudas',579,21],['Nueces',654,15],['Aceitunas',115,0.8],['Chocolate negro 85 %',598,10],
-['Cerveza (caña, 200 ml)',90,0],['Vino tinto (copa, 150 ml)',125,0],['Gin-tonic',200,0],
-['Refresco azucarado (lata)',139,0],['Zumo de naranja (vaso)',112,1.7],['Croquetas (1 ud)',95,3],
-['Patatas fritas (ración)',312,3.4],['Mayonesa (1 cda)',94,0.1],['Alioli (1 cda)',100,0.2],
-['Tortilla de patata (porción)',215,6],['Ensaladilla rusa (ración)',230,4],['Pizza (porción)',285,11]
+// carne
+['Pechuga de pollo (crudo)',120,23,'car'],['Muslo de pollo sin piel (crudo)',135,19,'car'],
+['Pechuga de pavo (crudo)',110,24,'car'],['Ternera magra (crudo)',130,21,'car'],
+['Carne picada de ternera 5 % (cruda)',137,21,'car'],['Solomillo de cerdo (crudo)',120,21,'car'],
+['Lomo de cerdo (crudo)',145,22,'car'],['Conejo (crudo)',133,22,'car'],
+['Pollo a la plancha (hecho)',165,31,'car'],['Ternera a la plancha (hecha)',180,27,'car'],
+// pescado y marisco
+['Merluza (cruda)',90,18,'pes'],['Bacalao fresco (crudo)',82,18,'pes'],['Lubina (cruda)',97,19,'pes'],
+['Dorada (cruda)',100,20,'pes'],['Salmón (crudo)',208,20,'pes'],['Atún al natural (lata escurrida)',108,24,'pes'],
+['Sardinas',208,25,'pes'],['Gambas peladas (crudas)',99,24,'pes'],['Langostinos cocidos',99,21,'pes'],
+['Pulpo cocido',82,15,'pes'],['Mejillones al vapor',86,12,'pes'],['Calamar (crudo)',92,16,'pes'],
+['Boquerones en vinagre',175,17,'pes'],
+// huevo
+['Huevo entero',143,12.6,'hue','ud',60],['Clara de huevo',52,11,'hue','clara',33],
+['Claras pasteurizadas (brik)',48,10.5,'hue'],
+// lácteos
+['Yogur griego 0 %',59,10,'lac','tarrina',150],['Yogur natural desnatado',45,4.5,'lac','tarrina',125],
+['Skyr',63,11,'lac','tarrina',150],['Queso fresco batido 0 %',47,8,'lac'],['Requesón',98,11,'lac'],
+['Leche desnatada',35,3.4,'lac'],['Leche semidesnatada',46,3.2,'lac'],['Kéfir',55,3.5,'lac'],
+['Queso curado',390,25,'lac'],['Queso parmesano rallado',400,33,'lac','cda',5],
+// suplementos
+['Proteína de suero (polvo)',400,80,'sup','cazo',30],['Creatina',0,0,'sup','cda',5],
+// legumbre
+['Lentejas cocidas (bote)',116,9,'leg'],['Garbanzos cocidos (bote)',164,9,'leg'],
+['Alubias cocidas (bote)',127,9,'leg'],['Lentejas secas',336,24,'leg'],['Guisantes',81,5,'leg'],
+['Edamame',121,11,'leg'],['Tofu firme',145,16,'leg'],['Hummus',166,8,'leg'],
+// cereales y tubérculos
+['Arroz blanco (crudo)',350,7,'cer'],['Arroz integral (crudo)',350,7.5,'cer'],
+['Arroz blanco cocido',130,2.7,'cer'],['Pasta (cruda)',355,12,'cer'],['Pasta cocida',158,6,'cer'],
+['Patata (cruda)',77,2,'cer'],['Patata cocida',87,2,'cer'],['Boniato',86,1.6,'cer'],
+['Avena en copos',389,17,'cer'],['Pan integral',247,13,'cer','rebanada',35],
+['Pan blanco',265,9,'cer','rebanada',30],['Tortilla de trigo integral',300,9,'cer','ud',45],
+['Cuscús (crudo)',376,13,'cer'],['Quinoa (cruda)',368,14,'cer'],['Maíz dulce (lata)',96,3,'cer'],
+// verdura
+['Tomate',18,0.9,'ver'],['Tomate cherry',18,0.9,'ver'],['Tomate triturado',30,1.3,'ver'],
+['Lechuga',15,1.4,'ver'],['Canónigos y rúcula',20,2.5,'ver'],['Espinacas frescas',23,2.9,'ver'],
+['Pepino',16,0.7,'ver'],['Pimiento',31,1,'ver'],['Cebolla',40,1.1,'ver'],['Ajo',149,6.4,'ver','diente',3],
+['Calabacín',17,1.2,'ver'],['Berenjena',25,1,'ver'],['Brócoli',34,2.8,'ver'],['Coliflor',25,1.9,'ver'],
+['Judías verdes',31,1.8,'ver'],['Champiñones',22,3.1,'ver'],['Setas',22,3,'ver'],
+['Zanahoria',41,0.9,'ver'],['Calabaza',26,1,'ver'],['Espárragos verdes',20,2.2,'ver'],
+['Puerro',61,1.5,'ver'],['Repollo',25,1.3,'ver'],['Menestra congelada',35,2,'ver'],
+['Gazpacho',40,0.8,'ver'],['Crema de verduras casera',45,1.5,'ver'],
+// fruta
+['Manzana',52,0.3,'fru','ud',180],['Plátano',89,1.1,'fru','ud',120],['Naranja',47,0.9,'fru','ud',200],
+['Mandarina',53,0.8,'fru','ud',80],['Pera',57,0.4,'fru','ud',170],['Kiwi',61,1.1,'fru','ud',90],
+['Fresas',32,0.7,'fru'],['Sandía',30,0.6,'fru'],['Melón',34,0.8,'fru'],['Arándanos',57,0.7,'fru'],
+['Piña',50,0.5,'fru'],['Uvas',69,0.7,'fru'],['Melocotón',39,0.9,'fru'],['Limón',29,1.1,'fru'],
+// grasas y frutos secos
+['Aceite de oliva virgen extra',900,0,'gra','cda',10],['Aguacate',160,2,'gra','medio',100],
+['Almendras crudas',579,21,'gra'],['Nueces',654,15,'gra'],['Anacardos',553,18,'gra'],
+['Crema de cacahuete',588,25,'gra','cda',15],['Aceitunas',115,0.8,'gra'],['Semillas de chía',486,17,'gra'],
+// embutido
+['Jamón ibérico',300,40,'emb'],['Jamón serrano',241,31,'emb'],['Lomo embuchado',180,35,'emb'],
+['Cecina',245,39,'emb'],['Fiambre de pavo',105,17,'emb'],
+// despensa
+['Vinagre',20,0,'otr'],['Mostaza',66,4,'otr','cda',10],['Salsa de soja',60,6,'otr','cda',15],
+['Tomate frito',90,1.5,'otr'],['Caldo de pollo desgrasado',8,1,'otr'],
+['Cacao puro en polvo',350,20,'otr','cda',6],['Chocolate negro 85 %',598,10,'otr','onza',10],
+['Miel',304,0.3,'otr','cda',20],
+// para registrar deslices sin engañarse
+['Cerveza',45,0.5,'beb','caña',200],['Vino tinto',83,0,'beb','copa',150],
+['Gin-tonic',80,0,'beb','copa',250],['Refresco azucarado',42,0,'beb','lata',330],
+['Zumo de naranja',45,0.7,'beb','vaso',250],['Croquetas',250,8,'pro','ud',38],
+['Patatas fritas de bolsa',540,6,'pro'],['Patatas fritas (guarnición)',190,3,'pro'],
+['Mayonesa',680,1,'pro','cda',14],['Alioli',720,1.5,'pro','cda',14],['Kétchup',110,1.2,'pro','cda',15],
+['Tortilla de patata',200,6,'pro'],['Ensaladilla rusa',190,4,'pro'],['Pizza',265,11,'pro','porción',110],
+['Helado',200,3.5,'pro'],['Bollería',400,6,'pro']
 ];
+const ALIMX={}; ALIM.forEach(a=>ALIMX[a[0]]=a);
+const CAT={car:'Carne',pes:'Pescado y marisco',hue:'Huevos',lac:'Lácteos',sup:'Suplementos',
+  leg:'Legumbre',cer:'Cereales y tubérculos',ver:'Verdura',fru:'Fruta',gra:'Aceite y frutos secos',
+  emb:'Embutido',otr:'Despensa',beb:'Bebidas',pro:'Procesados'};
+/* lo que se escala para cuadrar el día: hidrato, fruta y grasa. Proteína y verdura no se tocan. */
+const ESCALABLE={cer:1,fru:1,gra:1};
+
+/* ══════════════════ RECETAS ══════════════════
+   m: des | com | post | mer | cen · min: minutos reales de cocina
+   ing: [alimento, gramos] — el alimento tiene que existir en ALIM (los macros se calculan solos) */
+const RECETAS=[
+// ── desayunos ──
+{id:'d1',n:'Revuelto de claras con pavo y tomate',m:'des',min:8,
+ ing:[['Clara de huevo',150],['Huevo entero',120],['Fiambre de pavo',60],['Tomate',100],
+      ['Aceite de oliva virgen extra',5],['Pan integral',30]],
+ pasos:['Trocea el tomate y el pavo mientras se calienta la sartén con el aceite.',
+        'Echa el tomate 1 min, añade el pavo y luego las claras con los huevos batidos.',
+        'Remueve a fuego medio 2 min: cuajado pero jugoso. Sal, pimienta y el pan tostado al lado.']},
+{id:'d2',n:'Tostada de aguacate con huevo y claras',m:'des',min:10,
+ ing:[['Pan integral',40],['Aguacate',60],['Huevo entero',120],['Clara de huevo',100],['Tomate',50]],
+ pasos:['Tuesta el pan y machaca encima el aguacate con sal y limón.',
+        'Revuelve los huevos con las claras en la sartén, a fuego medio.',
+        'Monta el revuelto sobre la tostada y el tomate en dados por encima.']},
+{id:'d3',n:'Bowl de yogur griego, avena y arándanos',m:'des',min:3,
+ ing:[['Yogur griego 0 %',250],['Avena en copos',30],['Arándanos',80],['Almendras crudas',10],
+      ['Proteína de suero (polvo)',15]],
+ pasos:['Mezcla el yogur con la proteína hasta que no queden grumos.',
+        'Añade la avena, los arándanos y las almendras picadas.'],
+ tip:'Déjalo hecho la noche antes en un tarro: por la mañana está listo y la avena queda cremosa.'},
+{id:'d4',n:'Tortitas de avena y proteína',m:'des',min:12,
+ ing:[['Avena en copos',40],['Clara de huevo',150],['Proteína de suero (polvo)',30],['Plátano',60],
+      ['Aceite de oliva virgen extra',3]],
+ pasos:['Tritura la avena con las claras, la proteína y medio plátano.',
+        'Sartén antiadherente con unas gotas de aceite: 3-4 tortitas, 1 min por lado.',
+        'El resto del plátano en rodajas por encima. Canela si te gusta.']},
+{id:'d5',n:'Tortilla francesa con jamón y naranja',m:'des',min:7,
+ ing:[['Huevo entero',180],['Jamón serrano',30],['Aceite de oliva virgen extra',4],['Naranja',200]],
+ pasos:['Bate los huevos con una pizca de sal.',
+        'Cuájalos 2 min en la sartén con el aceite y el jamón en tiras dentro.',
+        'La naranja, entera y pelada — no en zumo.']},
+{id:'d6',n:'Batido de desayuno rápido',m:'des',min:2,
+ ing:[['Leche desnatada',300],['Proteína de suero (polvo)',30],['Avena en copos',30],['Plátano',80]],
+ pasos:['Todo a la batidora 30 segundos.','Si lo quieres más espeso, hielo o media cucharada de chía.'],
+ tip:'El desayuno de los días que sales corriendo. Mejor eso que no desayunar y llegar a la comida con hambre.'},
+// ── comidas ──
+{id:'c1',n:'Pollo al horno con patata y verduras',m:'com',min:20,batch:1,
+ ing:[['Pechuga de pollo (crudo)',220],['Patata (cruda)',200],['Pimiento',100],['Cebolla',50],
+      ['Brócoli',150],['Aceite de oliva virgen extra',12]],
+ pasos:['Horno a 200°. Patata en rodajas finas, pimiento y cebolla en tiras: bandeja, aceite, sal.',
+        '15 min de verdura sola, luego el pollo encima y 12 min más.',
+        'El brócoli, 5 min al vapor o en el microondas con un dedo de agua.'],
+ tip:'Multiplica por 3 y llena la bandeja: tienes tres comidas hechas y solo has cocinado una vez.'},
+{id:'c2',n:'Ternera salteada con arroz y brócoli',m:'com',min:18,
+ ing:[['Carne picada de ternera 5 % (cruda)',200],['Arroz blanco (crudo)',70],['Brócoli',200],
+      ['Aceite de oliva virgen extra',10],['Salsa de soja',15]],
+ pasos:['Pon el arroz a cocer (12 min) con el brócoli en un colador encima, al vapor.',
+        'Sartén muy caliente con el aceite: la carne suelta, removiendo, 5 min.',
+        'Junta todo con la soja y una vuelta más de fuego fuerte.']},
+{id:'c3',n:'Lentejas con pollo y verduras',m:'com',min:15,batch:1,
+ ing:[['Lentejas cocidas (bote)',300],['Pechuga de pollo (crudo)',150],['Zanahoria',60],['Cebolla',50],
+      ['Pimiento',60],['Aceite de oliva virgen extra',10]],
+ pasos:['Sofríe cebolla, zanahoria y pimiento picados 6 min con el aceite.',
+        'Añade el pollo en dados y dóralo 4 min.',
+        'Echa las lentejas escurridas, pimentón y un poco de agua. 4 min y listo.'],
+ tip:'Del bote y sin remordimientos: las lentejas de bote tienen lo mismo que las de puchero.'},
+{id:'c4',n:'Salmón al horno con boniato y espárragos',m:'com',min:20,
+ ing:[['Salmón (crudo)',180],['Boniato',200],['Espárragos verdes',150],
+      ['Aceite de oliva virgen extra',8]],
+ pasos:['Horno a 200°. Boniato en bastones, 20 min.',
+        'A los 10 min mete el salmón y los espárragos en la misma bandeja.',
+        'Limón y pimienta al sacar.']},
+{id:'c5',n:'Wok de pavo con verduras y arroz integral',m:'com',min:15,
+ ing:[['Pechuga de pavo (crudo)',220],['Arroz integral (crudo)',60],['Judías verdes',150],
+      ['Pimiento',80],['Aceite de oliva virgen extra',10],['Salsa de soja',15]],
+ pasos:['Arroz integral a cocer (18 min; si tienes prisa, del que viene ya cocido).',
+        'Fuego fuerte: pavo en tiras 4 min, fuera. Verduras 4 min.',
+        'Devuelve el pavo, añade la soja y el arroz, dos vueltas y a la mesa.']},
+{id:'c6',n:'Merluza con patata panadera y ensalada',m:'com',min:18,
+ ing:[['Merluza (cruda)',250],['Patata (cruda)',200],['Cebolla',60],
+      ['Aceite de oliva virgen extra',12],['Lechuga',80],['Tomate',100]],
+ pasos:['Patata y cebolla en rodajas finas, 8 min en el microondas tapadas con el aceite.',
+        'Pásalo a una fuente, la merluza encima y 10 min al horno a 200°.',
+        'Ensalada de lechuga y tomate con vinagre — el aceite ya va en la patata.']},
+{id:'c7',n:'Garbanzos con espinacas, atún y huevo',m:'com',min:12,batch:1,
+ ing:[['Garbanzos cocidos (bote)',180],['Espinacas frescas',200],['Atún al natural (lata escurrida)',80],
+      ['Huevo entero',120],['Aceite de oliva virgen extra',10],['Ajo',6]],
+ pasos:['Cuece los huevos 10 min mientras haces el resto.',
+        'Ajo laminado en el aceite, espinacas hasta que bajen, garbanzos escurridos y pimentón.',
+        'Atún desmigado por encima y el huevo partido en cuartos.']},
+{id:'c8',n:'Pechuga con pasta y tomate',m:'com',min:15,
+ ing:[['Pechuga de pollo (crudo)',200],['Pasta (cruda)',70],['Tomate triturado',150],['Cebolla',40],
+      ['Aceite de oliva virgen extra',10]],
+ pasos:['Pasta al agua.','Cebolla picada en el aceite 4 min, el tomate y orégano 6 min a fuego lento.',
+        'El pollo a la plancha en tiras, todo junto con la pasta escurrida.']},
+{id:'c9',n:'Solomillo de cerdo con puré y pimientos',m:'com',min:20,
+ ing:[['Solomillo de cerdo (crudo)',220],['Patata (cruda)',220],['Leche desnatada',50],['Pimiento',120],
+      ['Aceite de oliva virgen extra',10]],
+ pasos:['Patata en dados a cocer 15 min; machácala con la leche caliente, sal y pimienta.',
+        'Solomillo en medallones a la plancha, 3 min por lado, con los pimientos al lado.',
+        'Deja reposar la carne 2 min antes de cortarla: queda mucho más jugosa.']},
+{id:'c10',n:'Ensalada completa de atún, huevo y garbanzos',m:'com',min:8,
+ ing:[['Atún al natural (lata escurrida)',120],['Huevo entero',120],['Garbanzos cocidos (bote)',120],
+      ['Lechuga',100],['Tomate',120],['Cebolla',30],['Aceitunas',20],
+      ['Aceite de oliva virgen extra',10]],
+ pasos:['Huevos cocidos 10 min (o tenlos ya hechos del batch del domingo).',
+        'Todo en un bol grande, aceite medido con cuchara, vinagre y orégano.'],
+ tip:'La comida de los días de oficina: se prepara en 8 min y viaja bien en un tupper.'},
+// ── post-entreno ──
+{id:'p1',n:'Batido de proteína con agua',m:'post',min:1,
+ ing:[['Proteína de suero (polvo)',30]],
+ pasos:['Un cazo en 300 ml de agua, en los 60 min siguientes al entrenamiento.']},
+{id:'p2',n:'Batido con leche y plátano',m:'post',min:2,
+ ing:[['Proteína de suero (polvo)',30],['Leche desnatada',200],['Plátano',60]],
+ pasos:['A la batidora. Para los días de sesión larga o doble.']},
+{id:'p3',n:'Yogur griego con canela',m:'post',min:1,
+ ing:[['Yogur griego 0 %',200]],
+ pasos:['Con canela por encima. Cuando no te apetece otro batido.']},
+// ── meriendas ──
+{id:'m1',n:'Yogur griego con nueces y arándanos',m:'mer',min:2,
+ ing:[['Yogur griego 0 %',200],['Nueces',25],['Arándanos',50]],
+ pasos:['Mezclar. Las nueces, pesadas: 25 g son seis mitades, no un puñado.']},
+{id:'m2',n:'Requesón con manzana y almendras',m:'mer',min:3,
+ ing:[['Requesón',200],['Manzana',150],['Almendras crudas',15]],
+ pasos:['Manzana en dados sobre el requesón, almendras picadas y canela.']},
+{id:'m3',n:'Tostada de pavo y queso fresco',m:'mer',min:4,
+ ing:[['Pan integral',50],['Fiambre de pavo',80],['Queso fresco batido 0 %',100],['Tomate',60]],
+ pasos:['Pan tostado, queso batido de base, pavo y tomate rallado con orégano.']},
+{id:'m4',n:'Batido de proteína y crema de cacahuete',m:'mer',min:2,
+ ing:[['Leche desnatada',250],['Proteína de suero (polvo)',30],['Crema de cacahuete',15]],
+ pasos:['A la batidora con hielo. La crema de cacahuete, medida: la cuchara colmada son 200 kcal.']},
+{id:'m5',n:'Skyr con almendras',m:'mer',min:1,
+ ing:[['Skyr',200],['Almendras crudas',25]],
+ pasos:['La merienda de un minuto para llevar en la mochila.']},
+{id:'m6',n:'Huevos cocidos con tomate y aceitunas',m:'mer',min:12,batch:1,
+ ing:[['Huevo entero',180],['Tomate',100],['Aceitunas',25]],
+ pasos:['10 min de cocción, agua fría y a la nevera.',
+        'Sal, pimienta y un chorro de vinagre.'],
+ tip:'Cuece 12 huevos el domingo: merienda resuelta toda la semana.'},
+// ── cenas ──
+{id:'n1',n:'Merluza a la plancha con verdura salteada',m:'cen',min:12,
+ ing:[['Merluza (cruda)',250],['Calabacín',200],['Pimiento',100],['Cebolla',50],['Patata (cruda)',100],
+      ['Aceite de oliva virgen extra',12]],
+ pasos:['Patata en dados pequeños, 6 min al microondas.',
+        'Saltea calabacín, pimiento y cebolla 6 min; añade la patata para que se dore.',
+        'La merluza a la plancha 3 min por lado, sal gorda y limón.']},
+{id:'n2',n:'Tortilla de calabacín con ensalada de atún',m:'cen',min:15,
+ ing:[['Huevo entero',180],['Clara de huevo',100],['Calabacín',150],['Cebolla',60],
+      ['Aceite de oliva virgen extra',10],['Lechuga',80],['Tomate',100],
+      ['Atún al natural (lata escurrida)',60]],
+ pasos:['Calabacín y cebolla en juliana, pochados 8 min tapados.',
+        'Bate huevos y claras, mezcla y cuaja 2 min por lado.',
+        'Ensalada de lechuga, tomate y atún con vinagre al lado.']},
+{id:'n3',n:'Pavo a la plancha con crema de verduras',m:'cen',min:15,
+ ing:[['Pechuga de pavo (crudo)',220],['Calabaza',200],['Puerro',80],['Zanahoria',80],
+      ['Patata (cruda)',80],['Aceite de oliva virgen extra',10]],
+ pasos:['Calabaza, puerro, zanahoria y patata a cocer 15 min y triturar con el aceite.',
+        'El pavo en filetes finos a la plancha muy caliente, 2 min por lado.'],
+ tip:'La crema, en olla grande para 4 días. Es lo que te quita el hambre de la noche.'},
+{id:'n4',n:'Salmón sobre espinacas y aguacate',m:'cen',min:10,
+ ing:[['Salmón (crudo)',170],['Espinacas frescas',100],['Aguacate',50],['Tomate cherry',100],
+      ['Aceite de oliva virgen extra',3],['Limón',10]],
+ pasos:['Salmón a la plancha por el lado de la piel 4 min, 2 min por el otro.',
+        'Cama de espinacas crudas, aguacate y cherry; el salmón caliente encima y limón.']},
+{id:'n5',n:'Revuelto de gambas, champiñones y espárragos',m:'cen',min:12,
+ ing:[['Gambas peladas (crudas)',150],['Champiñones',150],['Espárragos verdes',100],['Huevo entero',120],
+      ['Aceite de oliva virgen extra',10],['Pan integral',30]],
+ pasos:['Champiñones y espárragos troceados a fuego fuerte 5 min, que se doren y suelten el agua.',
+        'Las gambas 2 min, los huevos batidos encima y remover 1 min.',
+        'Con el pan tostado para mojar.']},
+{id:'n6',n:'Pollo al curry ligero con calabacín',m:'cen',min:15,
+ ing:[['Pechuga de pollo (crudo)',220],['Calabacín',200],['Cebolla',60],['Leche desnatada',100],
+      ['Arroz blanco (crudo)',30],['Aceite de oliva virgen extra',10]],
+ pasos:['Arroz a cocer.','Cebolla y calabacín en el aceite 6 min, el pollo en dados 5 min más.',
+        'Curry en polvo, la leche y 4 min a fuego suave hasta que espese.']},
+{id:'n7',n:'Ensalada templada de pulpo y patata',m:'cen',min:12,
+ ing:[['Pulpo cocido',250],['Patata (cruda)',200],['Pimiento',80],['Cebolla',40],
+      ['Aceite de oliva virgen extra',12]],
+ pasos:['Patata cocida en rodajas (o del microondas, 8 min).',
+        'Pulpo ya cocido en rodajas por encima, pimiento y cebolla en tiras finas.',
+        'Aceite medido, pimentón y sal gorda.']},
+{id:'n8',n:'Hamburguesas de ternera con pisto',m:'cen',min:15,batch:1,
+ ing:[['Carne picada de ternera 5 % (cruda)',200],['Tomate triturado',150],['Calabacín',150],
+      ['Pimiento',100],['Cebolla',60],['Aceite de oliva virgen extra',10]],
+ pasos:['Pisto: cebolla, pimiento y calabacín en dados, 10 min, el tomate y 5 min más.',
+        'Dos hamburguesas con sal y pimienta, plancha 3 min por lado.',
+        'Sin pan: la hamburguesa sobre el pisto.'],
+ tip:'El pisto, en cantidad: acompaña carne, pescado o huevos toda la semana.'}
+];
+const RECX={}; RECETAS.forEach(r=>RECX[r.id]=r);
+const HUECOS=[['des','Desayuno'],['com','Comida'],['post','Post-entreno'],['mer','Merienda'],['cen','Cena']];
+const DIAS_SEM=['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+
+/* menú semanal: 7 días × los 5 huecos */
+const MENU=[
+ ['d1','c1','p1','m1','n1'],
+ ['d3','c2','p1','m2','n2'],
+ ['d2','c3','p3','m3','n3'],
+ ['d4','c4','p1','m4','n4'],
+ ['d5','c5','p1','m5','n5'],
+ ['d6','c6','p2','m6','n6'],
+ ['d3','c10','p3','m1','n7']
+];
+
+/* ══════════════════ CÁLCULO DE RECETAS ══════════════════ */
+function macros(ing){
+  let kcal=0,p=0;
+  ing.forEach(([n,g])=>{ const a=ALIMX[n]; if(!a) return; kcal+=a[1]*g/100; p+=a[2]*g/100; });
+  return {kcal:Math.round(kcal), p:Math.round(p)};
+}
+function escalable(n){ const a=ALIMX[n]; return !!(a && ESCALABLE[a[3]]); }
+/* ingredientes de una receta con un factor aplicado solo a hidratos, fruta y grasa */
+function ingEscalados(r,f){
+  return r.ing.map(([n,g])=>[n, escalable(n)&&f!==1 ? Math.max(5,Math.round(g*f/5)*5) : g]);
+}
+/* el día del menú, ajustado al objetivo de hoy */
+function diaMenu(i){
+  const O=objetivosDia();
+  const recs=MENU[i].map(id=>RECX[id]);
+  let base=0, esc=0;
+  recs.forEach(r=>{ const m=macros(r.ing); base+=m.kcal;
+    esc+=macros(r.ing.filter(x=>escalable(x[0]))).kcal; });
+  let f=1;
+  if(esc>0) f=Math.min(1.6,Math.max(0.6,1+(O.kcal-base)/esc));
+  const comidas=recs.map(r=>{ const ing=ingEscalados(r,f); const m=macros(ing);
+    return {r, ing, kcal:m.kcal, p:m.p}; });
+  const T=comidas.reduce((a,c)=>({kcal:a.kcal+c.kcal,p:a.p+c.p}),{kcal:0,p:0});
+  return {comidas, kcal:T.kcal, p:T.p, f, obj:O};
+}
+/* ══════════════════ VISTA: MENÚ Y RECETAS ══════════════════ */
+let diaSel=(new Date().getDay()+6)%7, filtroRec='todas';
+
+function vistaMenu(){
+  const d=diaMenu(diaSel), O=d.obj;
+  let h=`<div class="sug" style="margin-bottom:12px">`;
+  DIAS_SEM.forEach((n,i)=>{ h+=`<button class="${i===diaSel?'btn-p':''}" onclick="diaSel=${i};renderDieta()">${n.slice(0,3)}</button>`; });
+  h+=`</div>`;
+
+  const pk=Math.min(100,d.kcal/O.kcal*100), pp=Math.min(100,d.p/O.prot*100);
+  h+=`<div class="grid2" style="margin-bottom:12px">
+    <div class="stat"><div class="l">Calorías del día</div><div class="v">${d.kcal}</div>
+      <div class="n">objetivo ${O.kcal}</div><div class="bar"><i style="width:${pk}%"></i></div></div>
+    <div class="stat"><div class="l">Proteína</div><div class="v">${d.p} g</div>
+      <div class="n">objetivo ${O.prot} g</div><div class="bar"><i style="width:${pp}%;background:${d.p>=O.prot?'var(--green)':'var(--blue)'}"></i></div></div>
+  </div>`;
+
+  d.comidas.forEach((c,j)=>{
+    h+=`<div class="slot" onclick="fichaReceta('${c.r.id}',${diaSel})">
+      <div class="sl">${HUECOS[j][1]}</div>
+      <div class="sn">${esc(c.r.n)}</div>
+      <div class="sm">${c.kcal} kcal · ${c.p} g prot. · ${c.r.min} min${c.r.batch?' · para varios días':''}</div>
+    </div>`;
+  });
+
+  h+=`<div class="grid2" style="margin:14px 0 4px">
+    <button class="btn-p" onclick="listaCompra()">🛒  Lista de la compra</button>
+    <button onclick="registraDia(${diaSel})">Registrar el día entero</button>
+  </div>`;
+  h+=`<div class="box g">Las cantidades de arroz, patata, pan, fruta y aceite se ajustan solas a tu objetivo de hoy
+    (${O.kcal} kcal). La proteína y la verdura no se tocan nunca.
+    ${d.f!==1?`Hoy van al <strong>${Math.round(d.f*100)} %</strong> de la ración base.`:''}</div>`;
+  h+=`<div class="box">Pesos <strong>en crudo</strong> para carne, pescado, arroz y pasta. Es como se pesa al cocinar,
+    y es lo que hace que los números cuadren.</div>`;
+  return h;
+}
+
+function vistaRecetas(){
+  const F=[['todas','Todas'],['des','Desayuno'],['com','Comida'],['post','Post'],['mer','Merienda'],['cen','Cena']];
+  let h=`<div class="sug" style="margin-bottom:12px">`;
+  F.forEach(([k,n])=>{ h+=`<button class="${filtroRec===k?'btn-p':''}" onclick="filtroRec='${k}';renderDieta()">${n}</button>`; });
+  h+=`</div>`;
+  const L=RECETAS.filter(r=>filtroRec==='todas'||r.m===filtroRec);
+  L.forEach(r=>{ const m=macros(r.ing);
+    h+=`<div class="slot" onclick="fichaReceta('${r.id}',null)">
+      <div class="sl">${HUECOS.find(x=>x[0]===r.m)[1]} · ${r.min} min${r.batch?' · batch cooking':''}</div>
+      <div class="sn">${esc(r.n)}</div>
+      <div class="sm">${m.kcal} kcal · ${m.p} g prot. · ${r.ing.length} ingredientes</div>
+    </div>`; });
+  h+=`<div class="box" style="margin-top:14px">Todas son de <strong>20 minutos o menos</strong>. Las marcadas
+    <em>batch cooking</em> están pensadas para multiplicarlas por tres y dejar la semana resuelta.</div>`;
+  return h;
+}
+
+/* ficha de una receta · dia = índice del menú (con cantidades ajustadas) o null (ración base) */
+function fichaReceta(id,dia,mult){
+  const r=RECX[id]; if(!r) return;
+  mult=mult||1;
+  let ing;
+  if(dia!==null&&dia!==undefined){ const d=diaMenu(dia); const c=d.comidas.find(x=>x.r.id===id); ing=c?c.ing:r.ing; }
+  else ing=r.ing;
+  if(mult!==1) ing=ing.map(([n,g])=>[n,Math.max(1,Math.round(g*mult))]);
+  const M=macros(ing);
+  window.__ficha={id,dia,mult};
+
+  let h=`<p class="sh-t">${esc(r.n)}</p>
+  <p class="sh-s">${HUECOS.find(x=>x[0]===r.m)[1]} · ${r.min} min · ${M.kcal} kcal · ${M.p} g de proteína</p>
+  <div class="sug" style="margin-bottom:12px">
+    <button class="${mult===0.75?'btn-p':''}" onclick="fichaReceta('${id}',${dia===null||dia===undefined?'null':dia},0.75)">Ración ×0,75</button>
+    <button class="${mult===1?'btn-p':''}" onclick="fichaReceta('${id}',${dia===null||dia===undefined?'null':dia},1)">×1</button>
+    <button class="${mult===1.5?'btn-p':''}" onclick="fichaReceta('${id}',${dia===null||dia===undefined?'null':dia},1.5)">×1,5</button>
+  </div>
+  <h3 style="margin-top:4px">Ingredientes</h3><table>`;
+  ing.forEach(([n,g])=>{ const a=ALIMX[n]; const k=Math.round(a[1]*g/100), pr=Math.round(a[2]*g/100);
+    const ud=a[4]&&g/a[5]>=1?` <span class="muted">(${(g/a[5]).toFixed(g/a[5]%1?1:0).replace('.',',')} ${a[4]})</span>`:'';
+    h+=`<tr><td class="k">${g} g${ud}</td><td>${esc(n)}<br><span class="muted">${k} kcal · ${pr} g prot.</span></td></tr>`; });
+  h+=`<tr><td class="k">Total</td><td><strong>${M.kcal} kcal · ${M.p} g de proteína</strong></td></tr></table>
+  <h3>Cómo se hace</h3><div class="card"><ol style="margin:0;padding-left:19px;color:var(--tx2);font-size:14.5px">`;
+  r.pasos.forEach(p=>{ h+=`<li style="margin-bottom:6px">${esc(p)}</li>`; });
+  h+=`</ol></div>`;
+  if(r.tip) h+=`<div class="box g">${esc(r.tip)}</div>`;
+  h+=`<button class="btn-p btn-w" style="margin:14px 0 8px" onclick="registraReceta()">Registrar esta comida</button>
+  <div class="grid2">
+    <button onclick="editaReceta()">Ajustar antes de guardar</button>
+    <button onclick="cerrar()">Cerrar</button>
+  </div>`;
+  abre(h);
+}
+function ingFicha(){
+  const f=window.__ficha, r=RECX[f.id];
+  let ing;
+  if(f.dia!==null&&f.dia!==undefined){ const c=diaMenu(f.dia).comidas.find(x=>x.r.id===f.id); ing=c?c.ing:r.ing; }
+  else ing=r.ing;
+  return f.mult!==1?ing.map(([n,g])=>[n,Math.max(1,Math.round(g*f.mult))]):ing;
+}
+function registraReceta(){
+  const f=window.__ficha, r=RECX[f.id], ing=ingFicha(), M=macros(ing);
+  addComida({n:r.n+(f.mult!==1?' (×'+String(f.mult).replace('.',',')+')':''), kcal:M.kcal, p:M.p, src:'rec',
+             items:ing.map(([n,g])=>({a:n,g:g}))});
+  cerrar(); toast('Comida registrada');
+}
+function editaReceta(){
+  const f=window.__ficha, r=RECX[f.id];
+  ING=ingFicha().map(([n,g])=>{ const a=ALIMX[n]; return {a:n,g:g,k100:a[1],p100:a[2]}; });
+  formComida({n:r.n, src:'rec', deIng:1});
+}
+function registraDia(i){
+  const d=diaMenu(i);
+  d.comidas.forEach(c=>addComida({n:c.r.n, kcal:c.kcal, p:c.p, src:'rec',
+    items:c.ing.map(([n,g])=>({a:n,g:g}))}));
+  toast('Día registrado: '+d.kcal+' kcal');
+}
+
+/* lista de la compra de los 7 días */
+function listaCompra(){
+  const tot={};
+  MENU.forEach((_,i)=>{ diaMenu(i).comidas.forEach(c=>c.ing.forEach(([n,g])=>{ tot[n]=(tot[n]||0)+g; })); });
+  const porCat={};
+  Object.keys(tot).forEach(n=>{ const a=ALIMX[n]; (porCat[a[3]]=porCat[a[3]]||[]).push([n,tot[n]]); });
+  let h=`<p class="sh-t">Lista de la compra</p><p class="sh-s">Los 7 días del menú, con las cantidades ya ajustadas a tu objetivo de hoy.</p>`;
+  Object.keys(CAT).forEach(c=>{
+    if(!porCat[c]) return;
+    h+=`<h3 style="margin-top:14px">${CAT[c]}</h3><table>`;
+    porCat[c].sort((a,b)=>b[1]-a[1]).forEach(([n,g])=>{
+      const a=ALIMX[n]; const r=g<100?Math.round(g/5)*5:Math.round(g/10)*10;
+      const ud=a[4]?` <span class="muted">≈ ${Math.ceil(g/a[5])} ${a[4]}${Math.ceil(g/a[5])>1?'s':''}</span>`:'';
+      h+=`<tr><td>${esc(n)}</td><td class="k" style="text-align:right;white-space:nowrap">${r>=1000?(r/1000).toFixed(1).replace('.',',')+' kg':r+' g'}${ud}</td></tr>`;
+    });
+    h+=`</table>`;
+  });
+  h+=`<div class="box" style="margin-top:14px">Compra el fin de semana y cocina el domingo lo marcado como
+    <em>batch cooking</em>: pollo al horno, lentejas, pisto, crema de verduras y una docena de huevos cocidos.
+    Con eso, entre semana solo tienes que montar el plato.</div>
+  <button class="btn-w" style="margin-top:4px" onclick="cerrar()">Cerrar</button>`;
+  abre(h);
+}
+
 function objetivosDia(){
   const p=media7(hoyISO())??ultimoPeso()??PESO0;
-  if(p<=92) return {kcal:1950,prot:175}; if(p<=98) return {kcal:2050,prot:180};
+  if(p<=86) return {kcal:1900,prot:170}; if(p<=92) return {kcal:1950,prot:175};
+  if(p<=98) return {kcal:2050,prot:180};
   return {kcal:2200,prot:190};
 }
 function totalDia(f){
@@ -1439,7 +2223,7 @@ function fotoElegida(inp){
   const f=inp.files[0]; inp.value=''; if(!f) return;
   const r=new FileReader();
   r.onload=()=>{ const im=new Image();
-    im.onload=()=>{ analiza(reduce(im,900,.8), reduce(im,150,.5)); };
+    im.onload=()=>{ pideIA({b64:reduce(im,900,.8), mini:reduce(im,150,.5)}); };
     im.onerror=()=>toast('No se pudo leer la foto');
     im.src=r.result; };
   r.readAsDataURL(f);
@@ -1451,28 +2235,139 @@ function reduce(im,max,q){
   c.getContext('2d').drawImage(im,0,0,c.width,c.height);
   return c.toDataURL('image/jpeg',q);
 }
-const SYS=`Eres un nutricionista español que estima el contenido de un plato a partir de una foto.
-Reglas:
-- Estima raciones realistas de la cocina española a partir del tamaño del plato y los cubiertos.
-- INCLUYE SIEMPRE el aceite de cocinado, las salsas y los aliños que se intuyan aunque no se vean bien: es la causa número uno de subestimar calorías.
-- Si algo no se distingue, elige la opción más calórica razonable y dilo en "aviso".
-- Sé breve en los nombres. Cantidades en gramos.
-Devuelve el resultado llamando a la herramienta "registrar_comida".`;
 
+/* — entrada por texto — */
+function formTexto(){
+  abre(`<p class="sh-t">Describe lo que has comido</p>
+  <p class="sh-s">Con cantidades si las sabes. Es más preciso y más barato que la foto.</p>
+  <div class="fld"><textarea id="tDesc" rows="4" placeholder="2 huevos revueltos, 150 g de pollo a la plancha, ensalada con una cucharada de aceite y una manzana"></textarea></div>
+  <div class="gbox"><div class="gt">Truco</div><p>Di los gramos de la proteína y las cucharadas de aceite.
+    Son los dos números que más mueven el resultado; lo demás importa poco.</p></div>
+  <button class="btn-p btn-w" style="margin-bottom:8px" onclick="analizaTexto()">Calcular</button>
+  <div class="grid2"><button onclick="analizaTexto(1)">Calcular sin la API</button><button onclick="cerrar()">Cancelar</button></div>`);
+  setTimeout(()=>{ const t=$('#tDesc'); if(t) t.focus(); },120);
+}
+function analizaTexto(local){
+  const t=($('#tDesc')&&$('#tDesc').value||'').trim();
+  if(!t){ toast('Escribe qué has comido'); return; }
+  if(local||!D.api.key) return calcLocal(t);
+  pideIA({texto:t});
+}
+
+/* cálculo local, sin API: reconoce "150 g de pollo", "2 huevos", "una cucharada de aceite" */
+const NUMS={un:1,una:1,uno:1,dos:2,tres:3,cuatro:4,cinco:5,seis:6,medio:0.5,media:0.5};
+/* cómo se llaman los alimentos al hablar, no en la etiqueta */
+const ALIAS={pollo:'Pechuga de pollo (crudo)',pechuga:'Pechuga de pollo (crudo)',
+ pavo:'Pechuga de pavo (crudo)',ternera:'Ternera magra (crudo)',picada:'Carne picada de ternera 5 % (cruda)',
+ solomillo:'Solomillo de cerdo (crudo)',lomo:'Lomo de cerdo (crudo)',cerdo:'Lomo de cerdo (crudo)',
+ conejo:'Conejo (crudo)',merluza:'Merluza (cruda)',bacalao:'Bacalao fresco (crudo)',lubina:'Lubina (cruda)',
+ dorada:'Dorada (cruda)',salmon:'Salmón (crudo)',atun:'Atún al natural (lata escurrida)',
+ gambas:'Gambas peladas (crudas)',langostinos:'Langostinos cocidos',pulpo:'Pulpo cocido',
+ calamar:'Calamar (crudo)',mejillones:'Mejillones al vapor',sardinas:'Sardinas',
+ huevo:'Huevo entero',huevos:'Huevo entero',claras:'Clara de huevo',clara:'Clara de huevo',
+ tortilla:'Huevo entero',yogur:'Yogur griego 0 %',griego:'Yogur griego 0 %',skyr:'Skyr',
+ requeson:'Requesón',leche:'Leche desnatada',queso:'Queso fresco batido 0 %',
+ batido:'Proteína de suero (polvo)',proteina:'Proteína de suero (polvo)',
+ lentejas:'Lentejas cocidas (bote)',garbanzos:'Garbanzos cocidos (bote)',alubias:'Alubias cocidas (bote)',
+ arroz:'Arroz blanco (crudo)',pasta:'Pasta (cruda)',macarrones:'Pasta (cruda)',espaguetis:'Pasta (cruda)',
+ patata:'Patata (cruda)',patatas:'Patata (cruda)',boniato:'Boniato',avena:'Avena en copos',
+ pan:'Pan integral',tostada:'Pan integral',cuscus:'Cuscús (crudo)',quinoa:'Quinoa (cruda)',
+ aceite:'Aceite de oliva virgen extra',aguacate:'Aguacate',almendras:'Almendras crudas',nueces:'Nueces',
+ aceitunas:'Aceitunas',jamon:'Jamón serrano',cecina:'Cecina',
+ ensalada:'Lechuga',lechuga:'Lechuga',tomate:'Tomate',verdura:'Menestra congelada',
+ verduras:'Menestra congelada',brocoli:'Brócoli',espinacas:'Espinacas frescas',calabacin:'Calabacín',
+ pimiento:'Pimiento',cebolla:'Cebolla',champinones:'Champiñones',esparragos:'Espárragos verdes',
+ manzana:'Manzana',platano:'Plátano',naranja:'Naranja',pera:'Pera',kiwi:'Kiwi',fresas:'Fresas',
+ cerveza:'Cerveza',cana:'Cerveza',canas:'Cerveza',vino:'Vino tinto',refresco:'Refresco azucarado',
+ zumo:'Zumo de naranja',croquetas:'Croquetas',mayonesa:'Mayonesa',alioli:'Alioli',pizza:'Pizza'};
+function claveAlim(n){ return norm(n.replace(/\s*\(.*?\)/g,'')); }
+/* busca el alimento del que habla un trozo de frase */
+function buscaEnFrase(q){
+  let mejor=null, largo=0;
+  ALIM.forEach(a=>{ const k=claveAlim(a[0]);
+    if(k.length>2 && q.includes(k) && k.length>largo){ mejor=a; largo=k.length; } });
+  if(mejor) return mejor;
+  Object.keys(ALIAS).forEach(k=>{
+    if(k.length>largo && new RegExp('(^|[^a-z])'+k+'([^a-z]|$)').test(q)){ mejor=ALIMX[ALIAS[k]]; largo=k.length; } });
+  if(mejor) return mejor;
+  ALIM.forEach(a=>{ claveAlim(a[0]).split(' ').forEach(w=>{
+    if(w.length>4 && w.length>largo && new RegExp('(^|[^a-z])'+w).test(q)){ mejor=a; largo=w.length; } }); });
+  return mejor;
+}
+function calcLocal(txt){
+  const partes=txt.split(/[,;\n]|\s+y\s+|\s+con\s+|\s+m[a\u00e1]s\s+|\+/i);
+  const items=[], perdidos=[];
+  partes.forEach(t=>{
+    t=t.trim(); if(!t) return;
+    const q=norm(t);
+    const mejor=buscaEnFrase(q);
+    if(!mejor){ if(t.length>2) perdidos.push(t); return; }
+    const m=q.match(/(\d+[.,]?\d*)\s*(g|gr|gramos|ml)\b/) ;
+    let g;
+    if(m) g=parseFloat(m[1].replace(',','.'));
+    else{
+      const mu=q.match(/(\d+[.,]?\d*|un|una|uno|dos|tres|cuatro|cinco|seis|medio|media)\s/);
+      const n=mu?(NUMS[mu[1]]!==undefined?NUMS[mu[1]]:parseFloat(mu[1].replace(',','.'))):1;
+      g=mejor[5]?n*mejor[5]:(mejor[3]==='ver'?150:100)*n;
+    }
+    items.push({a:mejor[0], g:Math.round(g), k100:mejor[1], p100:mejor[2]});
+  });
+  if(!items.length){
+    abre(`<p class="sh-t">No he reconocido nada</p>
+    <div class="gbox err"><p>No he encontrado ningún alimento de la lista en esa frase. Prueba a meterlo con el buscador.</p></div>
+    <button class="btn-p btn-w" style="margin-bottom:8px" onclick="formComida({n:'',kcal:0,p:0,src:'man'})">Meterlo a mano</button>
+    <button class="btn-w" onclick="cerrar()">Cerrar</button>`); return;
+  }
+  ING=items;
+  formComida({n:txt.length<42?txt:items.map(i=>i.a.replace(/\s*\(.*?\)/g,'')).slice(0,3).join(' + '),
+    src:'txt', deIng:1, conf:'media',
+    aviso:(perdidos.length?'No he reconocido: '+perdidos.join(', ')+'. ':'')+'Cantidades estimadas sin API: repásalas.'});
+}
+
+/* — llamada a Claude (foto o texto) — */
+function tablaAlim(){ return ALIM.map(a=>a[0]+'|'+a[1]+'|'+a[2]).join('\n'); }
+function tablaRecetas(){ return RECETAS.map(r=>{ const m=macros(r.ing); return r.n+'|'+m.kcal+'|'+m.p; }).join('\n'); }
+function sysIA(conFoto){
+  return `Eres un nutricionista español que calcula las calorías y la proteína de una comida.
+
+TABLA DE REFERENCIA — nombre|kcal por 100 g|proteína en g por 100 g.
+Usa SIEMPRE estos valores cuando el alimento esté en la tabla, y su nombre exacto en "a".
+Las carnes, pescados, arroz y pasta de la tabla son valores EN CRUDO.
+${tablaAlim()}
+
+RECETAS DEL PLAN DEL USUARIO — nombre|kcal|proteína de una ración.
+Si lo que ve o describe coincide con una de estas, usa directamente sus números.
+${tablaRecetas()}
+
+REGLAS
+- Desglosa siempre la comida en ingredientes con sus gramos. Los gramos son lo único que estimas tú.
+- ${conFoto
+  ? 'INCLUYE SIEMPRE el aceite de cocinado, las salsas y los aliños aunque no se vean: es la causa número uno de subestimar. Estima el tamaño de la ración por el plato y los cubiertos.'
+  : 'Si el usuario da una cantidad, respétala exactamente. Si no la da, usa una ración estándar española y dilo en "aviso". Si menciona aceite, salsa o aliño sin cantidad, cuenta 10 g de aceite por cucharada.'}
+- Si un alimento no está en la tabla, estímalo tú y pon en "a" un nombre corto y claro.
+- kcal100 y p100 son los valores por 100 g del alimento; los totales los calcula la app sumando.
+- Sé breve en los nombres.`;
+}
 const HERR={
   name:'registrar_comida',
-  description:'Registra el contenido nutricional estimado del plato de la foto.',
+  description:'Registra el desglose nutricional de la comida, ingrediente a ingrediente.',
   input_schema:{type:'object',properties:{
-    plato:{type:'string',description:'Nombre corto del plato'},
-    items:{type:'array',description:'Alimentos identificados',items:{type:'object',properties:{
-      a:{type:'string',description:'Alimento'}, g:{type:'number',description:'Gramos estimados'},
-      kcal:{type:'number'}, p:{type:'number',description:'Proteína en gramos'}},required:['a','kcal']}},
-    kcal:{type:'number',description:'Calorías totales del plato'},
-    p:{type:'number',description:'Proteína total en gramos'},
+    plato:{type:'string',description:'Nombre corto de la comida'},
+    items:{type:'array',description:'Ingredientes con sus gramos y sus valores por 100 g',
+      items:{type:'object',properties:{
+        a:{type:'string',description:'Alimento; el nombre exacto de la tabla si aparece en ella'},
+        g:{type:'number',description:'Gramos'},
+        kcal100:{type:'number',description:'Calorías por 100 g de ese alimento'},
+        p100:{type:'number',description:'Proteína en gramos por 100 g de ese alimento'}},
+      required:['a','g','kcal100','p100']}},
+    kcal:{type:'number',description:'Calorías totales, solo si no puedes desglosar'},
+    p:{type:'number',description:'Proteína total en gramos, solo si no puedes desglosar'},
     conf:{type:'string',enum:['alta','media','baja'],description:'Confianza de la estimación'},
     aviso:{type:'string',description:'Aviso breve si algo es difícil de estimar; cadena vacía si no hay'}
-  },required:['plato','kcal','p']}
+  },required:['plato','items']}
 };
+const JSONMIN='\nResponde ÚNICAMENTE con este JSON, sin texto alrededor:\n'+
+  '{"plato":"","items":[{"a":"","g":0,"kcal100":0,"p100":0}],"conf":"media","aviso":""}';
 
 // Extrae el primer objeto JSON que aparezca en un texto, aunque venga con ``` o con prosa alrededor
 function sacaJSON(t){
@@ -1482,7 +2377,6 @@ function sacaJSON(t){
   if(a<0||b<=a) return null;
   try{ return JSON.parse(t.slice(a,b+1)); }catch(err){ return null; }
 }
-
 async function llamaAPI(cuerpo){
   const r=await fetch('https://api.anthropic.com/v1/messages',{
     method:'POST',
@@ -1500,67 +2394,126 @@ async function llamaAPI(cuerpo){
   }
   return r.json();
 }
-
-async function analiza(b64grande, b64mini){
-  abre(`<p class="sh-t">Analizando la foto</p><p class="sh-s">Suele tardar unos segundos.</p>
+async function pideIA(o){
+  window.__ult=o;
+  abre(`<p class="sh-t">${o.texto?'Calculando':'Analizando la foto'}</p><p class="sh-s">Suele tardar unos segundos.</p>
     <div class="gbox"><p><span class="spin"></span>Preguntando a Claude…</p></div>`);
-  const modelo=D.api.model||'claude-haiku-4-5';
-  const msgs=[{role:'user',content:[
-    {type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64grande.split(',')[1]}},
-    {type:'text',text:'¿Qué hay en este plato y cuántas calorías y proteína tiene?'}]}];
+  const conFoto=!!o.b64, modelo=D.api.model||'claude-haiku-4-5', SYS=sysIA(conFoto);
+  const contenido=[];
+  if(conFoto) contenido.push({type:'image',source:{type:'base64',media_type:'image/jpeg',data:o.b64.split(',')[1]}});
+  contenido.push({type:'text',text:(conFoto
+      ? '¿Qué hay en este plato? Desglósalo en ingredientes con gramos.'
+      : 'Comida: "'+o.texto+'". Desglósala en ingredientes con gramos.')
+    + (o.extra?'\nAclaración del usuario, tiene prioridad sobre lo que hayas supuesto: '+o.extra:'')});
+  const msgs=[{role:'user',content:contenido}];
   try{
-    let o=null;
+    let x=null;
     try{
       // Vía principal: herramienta con esquema. Funciona en todos los modelos.
-      const j=await llamaAPI({model:modelo, max_tokens:1200, system:SYS, messages:msgs,
-        tools:[HERR], tool_choice:{type:'tool',name:'registrar_comida'}});
+      const j=await llamaAPI({model:modelo, max_tokens:1500,
+        system:SYS+'\nDevuelve el resultado llamando a la herramienta "registrar_comida".',
+        messages:msgs, tools:[HERR], tool_choice:{type:'tool',name:'registrar_comida'}});
       const b=(j.content||[]).find(c=>c.type==='tool_use');
-      if(b) o=b.input;
-      if(!o) o=sacaJSON((j.content||[]).filter(c=>c.type==='text').map(c=>c.text).join('\n'));
+      if(b) x=b.input;
+      if(!x) x=sacaJSON((j.content||[]).filter(c=>c.type==='text').map(c=>c.text).join('\n'));
     }catch(err){
-      // Plan B: sin herramientas, pidiendo JSON en el texto
+      // Plan B: sin herramientas, pidiendo el JSON en el texto
       if(err.status===400){
-        const j2=await llamaAPI({model:modelo, max_tokens:1200, messages:msgs,
-          system:SYS+`\nResponde ÚNICAMENTE con este JSON, sin texto alrededor:\n{"plato":"","items":[{"a":"","g":0,"kcal":0,"p":0}],"kcal":0,"p":0,"conf":"media","aviso":""}`});
-        o=sacaJSON((j2.content||[]).filter(c=>c.type==='text').map(c=>c.text).join('\n'));
+        const j2=await llamaAPI({model:modelo, max_tokens:1500, system:SYS+JSONMIN, messages:msgs});
+        x=sacaJSON((j2.content||[]).filter(c=>c.type==='text').map(c=>c.text).join('\n'));
       } else throw err;
     }
-    if(!o||typeof o.kcal!=='number') throw new Error('La respuesta no vino en el formato esperado. Puedes meterlo a mano y seguir.');
-    formComida({n:o.plato||'Comida', kcal:Math.round(o.kcal||0), p:Math.round(o.p||0), img:b64mini,
-                src:'ia', items:o.items||[], conf:o.conf||'media', aviso:o.aviso||''});
+    const items=(x&&Array.isArray(x.items))?x.items:[];
+    if(!x || (!items.length && typeof x.kcal!=='number'))
+      throw new Error('La respuesta no vino en el formato esperado. Puedes meterlo a mano y seguir.');
+    ING=items.map(i=>{
+      const a=ALIMX[i.a], g=+i.g||0;
+      const k100=a?a[1]:(+i.kcal100 || (g?Math.round((+i.kcal||0)*100/g):0));
+      const p100=a?a[2]:(+i.p100   || (g?Math.round((+i.p||0)*100/g*10)/10:0));
+      return {a:i.a||'Ingrediente', g:Math.round(g), k100:k100, p100:p100};
+    }).filter(i=>i.g>0);
+    formComida({n:x.plato||o.texto||'Comida', img:o.mini, src:conFoto?'ia':'txt', deIng:1,
+                kcal:Math.round(x.kcal||0), p:Math.round(x.p||0),
+                conf:x.conf||'media', aviso:x.aviso||''});
   }catch(err){
-    abre(`<p class="sh-t">No ha podido analizarla</p>
+    abre(`<p class="sh-t">No ha podido calcularlo</p>
       <div class="gbox err"><p>${esc(err.message)}</p></div>
-      <button class="btn-p btn-w" style="margin-bottom:8px" onclick="formComida({n:'',kcal:0,p:0,src:'man'})">Meterlo a mano</button>
+      ${o.texto?`<button class="btn-p btn-w" style="margin-bottom:8px" onclick="calcLocal(${JSON.stringify(o.texto).replace(/"/g,'&quot;')})">Calcularlo sin la API</button>`:''}
+      <button class="btn-w" style="margin-bottom:8px" onclick="ING=[];formComida({n:'',kcal:0,p:0,src:'man'})">Meterlo a mano</button>
       <button class="btn-w" onclick="cerrar()">Cerrar</button>`);
   }
 }
+function afinar(){
+  const t=($('#fAfina')&&$('#fAfina').value||'').trim();
+  if(!t){ toast('Escribe qué hay que corregir'); return; }
+  const o=window.__ult||{}; o.extra=t; pideIA(o);
+}
 
-/* — formulario de comida (IA o manual) — */
+/* — formulario de comida (foto, texto, receta o a mano) — */
+let ING=[];
+function totING(){
+  return ING.reduce((a,i)=>({kcal:a.kcal+i.k100*i.g/100, p:a.p+i.p100*i.g/100}),{kcal:0,p:0});
+}
+function filasIng(){
+  if(!ING.length) return '<p class="muted" style="margin:0">Sin ingredientes: puedes escribir el total a mano o buscarlos abajo.</p>';
+  return ING.map((i,j)=>`<div class="ingr">
+    <div class="inn">${esc(i.a)}<br><span class="muted" id="ik${j}">${Math.round(i.k100*i.g/100)} kcal · ${Math.round(i.p100*i.g/100)} g prot.</span></div>
+    <div class="ing"><input type="number" inputmode="numeric" value="${i.g}" oninput="setIngG(${j},this.value)"><span>g</span></div>
+    <button class="xbtn" onclick="delIng(${j})" aria-label="Quitar">×</button>
+  </div>`).join('');
+}
+function pintaTot(){
+  const T=totING();
+  if($('#fK')) $('#fK').value=Math.round(T.kcal);
+  if($('#fP')) $('#fP').value=Math.round(T.p);
+}
+function setIngG(j,v){
+  ING[j].g=Math.max(0,+v||0);
+  const c=$('#ik'+j); if(c) c.textContent=Math.round(ING[j].k100*ING[j].g/100)+' kcal · '+Math.round(ING[j].p100*ING[j].g/100)+' g prot.';
+  pintaTot();
+}
+function delIng(j){ ING.splice(j,1); const L=$('#ingList'); if(L) L.innerHTML=filasIng(); pintaTot(); }
+function addIng(j){
+  const a=ALIM[j];
+  ING.push({a:a[0], g:a[5]||100, k100:a[1], p100:a[2]});
+  const L=$('#ingList'); if(L) L.innerHTML=filasIng();
+  pintaTot(); $('#fB').value=''; $('#fR').style.display='none';
+  const F=$('#fN'); if(F&&!F.value.trim()) F.value=a[0].replace(/\s*\(.*?\)/g,'');
+}
 function formComida(d){
   d=d||{n:'',kcal:0,p:0,src:'man'};
-  let h=`<p class="sh-t">${d.src==='ia'?'Revisa y corrige':'Añadir comida'}</p>
-  <p class="sh-s">${d.src==='ia'?'La estimación por foto se equivoca a menudo. Ajusta el número antes de guardar.':'A mano, con el buscador o desde tus favoritos.'}</p>`;
+  if(!d.deIng) ING=[];
+  const T=totING(), hayIng=ING.length>0;
+  const kcal=hayIng?Math.round(T.kcal):(d.kcal||''), prot=hayIng?Math.round(T.p):(d.p||'');
+  const tit={ia:'Revisa y corrige',txt:'Revisa las cantidades',rec:'Ajusta la ración'}[d.src]||'Añadir comida';
+  const sub={ia:'La foto se equivoca a menudo con el aceite y el tamaño de la ración. Corrige los gramos: los totales se recalculan solos.',
+             txt:'Corrige los gramos que no cuadren; los totales se recalculan solos.',
+             rec:'Cambia los gramos que hayas variado al cocinar.'}[d.src]
+            ||'A mano, con el buscador de alimentos o desde tus favoritos.';
+  let h=`<p class="sh-t">${tit}</p><p class="sh-s">${sub}</p>`;
   if(d.img) h+=`<img src="${d.img}" style="width:100%;max-height:170px;object-fit:cover;border-radius:12px;margin-bottom:12px">`;
-  if(d.src==='ia'&&d.items&&d.items.length){
-    h+=`<div class="gbox"><div class="gt">Lo que ha visto · confianza ${esc(d.conf)}</div>
-      <p>${d.items.map(i=>esc(i.a)+' <b>'+(i.g||'?')+' g</b> · '+(i.kcal||0)+' kcal').join('<br>')}</p></div>`;
-    if(d.aviso) h+=`<div class="gbox err"><div class="gt">Aviso</div><p>${esc(d.aviso)}</p></div>`;
-  }
-  h+=`<div class="fld"><label>Qué has comido</label><input id="fN" value="${esc(d.n)}" placeholder="Pollo con arroz y ensalada"></div>
+  if(d.conf) h+=`<div class="gbox"><div class="gt">Confianza de la estimación · ${esc(d.conf)}</div>
+    <p>${d.src==='ia'?'Lo que ha visto en la foto está abajo, ingrediente a ingrediente.':'Desglose calculado abajo.'}</p></div>`;
+  if(d.aviso) h+=`<div class="gbox err"><div class="gt">Aviso</div><p>${esc(d.aviso)}</p></div>`;
+  h+=`<div class="fld"><label>Qué has comido</label><input id="fN" value="${esc(d.n||'')}" placeholder="Pollo con arroz y ensalada"></div>
+  <label style="display:block;font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--tx3);font-weight:700;margin:14px 0 7px">Ingredientes</label>
+  <div id="ingList" class="inglist">${filasIng()}</div>
+  <div class="fld" style="margin-top:10px"><label>Añadir alimento (busca y toca)</label>
+    <input id="fB" placeholder="pollo, arroz, aceite, yogur…" oninput="buscaAlim(this.value)">
+    <div class="res" id="fR" style="display:none"></div></div>
   <div class="grid2">
-    <div class="fld"><label>Calorías</label><input id="fK" type="number" inputmode="numeric" value="${d.kcal||''}" placeholder="0"></div>
-    <div class="fld"><label>Proteína (g)</label><input id="fP" type="number" inputmode="numeric" value="${d.p||''}" placeholder="0"></div>
+    <div class="fld"><label>Calorías</label><input id="fK" type="number" inputmode="numeric" value="${kcal}" placeholder="0"></div>
+    <div class="fld"><label>Proteína (g)</label><input id="fP" type="number" inputmode="numeric" value="${prot}" placeholder="0"></div>
   </div>`;
-  if(d.src!=='ia'){
-    h+=`<div class="fld"><label>Buscador de alimentos (por 100 g)</label>
-      <input id="fB" placeholder="Escribe: pollo, arroz, yogur…" oninput="buscaAlim(this.value)">
-      <div class="res" id="fR" style="display:none"></div></div>`;
-    if(D.favs.length){
-      h+=`<label style="display:block;font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--tx3);font-weight:700;margin:14px 0 7px">Tus favoritos</label><div class="sug">`;
-      D.favs.forEach((f,i)=>{ h+=`<button onclick="ponFav(${i})">${esc(f.n)} · ${f.kcal}</button>`; });
-      h+=`</div>`;
-    }
+  if(D.favs.length&&d.src==='man'){
+    h+=`<label style="display:block;font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--tx3);font-weight:700;margin:4px 0 7px">Tus favoritos</label><div class="sug">`;
+    D.favs.forEach((f,i)=>{ h+=`<button onclick="ponFav(${i})">${esc(f.n)} · ${f.kcal}</button>`; });
+    h+=`</div>`;
+  }
+  if(d.src==='ia'||d.src==='txt'){
+    h+=`<div class="fld"><label>¿Se ha equivocado en algo?</label>
+      <input id="fAfina" placeholder="el pollo eran 250 g y no llevaba aceite">
+      <button class="btn-s" style="margin-top:7px" onclick="afinar()">Volver a preguntar con esta aclaración</button></div>`;
   }
   h+=`<button class="btn-p btn-w" style="margin:14px 0 8px" onclick="confirmaComida()">Guardar</button>
   <div class="grid2">
@@ -1574,22 +2527,15 @@ function formComida(d){
 function buscaAlim(q){
   const R=$('#fR'); q=norm(q.trim());
   if(q.length<2){ R.style.display='none'; return; }
-  const m=ALIM.filter(a=>norm(a[0]).includes(q)).slice(0,10);
+  const m=[]; ALIM.forEach((a,i)=>{ if(m.length<10 && norm(a[0]).includes(q)) m.push(i); });
   if(!m.length){ R.style.display='none'; return; }
   R.style.display='block';
-  R.innerHTML=m.map(a=>`<div onclick="ponAlim('${esc(a[0]).replace(/'/g,'')}',${a[1]},${a[2]})"><b>${esc(a[0])}</b><br>${a[1]} kcal · ${a[2]} g prot. por 100 g</div>`).join('');
-}
-function ponAlim(n,k,p){
-  const gr=prompt('¿Cuántos gramos de "'+n+'"?','150');
-  if(gr===null) return;
-  const q=parseFloat(gr); if(isNaN(q)||q<=0) return;
-  const F=$('#fN'), K=$('#fK'), P=$('#fP');
-  F.value = F.value ? F.value+' + '+n : n;
-  K.value = Math.round((+K.value||0) + k*q/100);
-  P.value = Math.round((+P.value||0) + p*q/100);
-  $('#fB').value=''; $('#fR').style.display='none';
+  R.innerHTML=m.map(i=>{ const a=ALIM[i];
+    return `<div onclick="addIng(${i})"><b>${esc(a[0])}</b><br>${a[1]} kcal · ${a[2]} g prot. por 100 g${a[4]?' · 1 '+esc(a[4])+' = '+a[5]+' g':''}</div>`;
+  }).join('');
 }
 function ponFav(i){ const f=D.favs[i];
+  ING=[]; const L=$('#ingList'); if(L) L.innerHTML=filasIng();
   $('#fN').value=f.n; $('#fK').value=f.kcal; $('#fP').value=f.p; }
 function favDesdeForm(){
   const n=$('#fN').value.trim(); if(!n){ toast('Ponle nombre primero'); return; }
@@ -1599,8 +2545,9 @@ function confirmaComida(){
   const n=$('#fN').value.trim()||'Comida';
   const kcal=Math.round(+$('#fK').value||0), p=Math.round(+$('#fP').value||0);
   if(kcal<=0){ toast('Pon las calorías'); return; }
-  addComida({n,kcal,p,img:window.__img,src:window.__src});
-  cerrar(); toast('Comida registrada');
+  addComida({n,kcal,p,img:window.__img,src:window.__src,
+             items:ING.map(i=>({a:i.a,g:i.g}))});
+  ING=[]; cerrar(); toast('Comida registrada');
 }
 
 /* — ajustes de la API — */

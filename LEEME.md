@@ -69,6 +69,9 @@ Por eso, cada 3 o 4 semanas entra en **Más → Exportar copia** y guarda el arc
 Archivos o mándatelo por correo. Si algún día pasa algo, **Más → Importar copia** y lo
 recuperas todo.
 
+**Los pesos son en crudo.** Carne, pescado, arroz y pasta se pesan crudos, que es como se pesan
+al cocinar. Es lo que hace que los números del menú y de la app cuadren entre sí.
+
 **Para actualizar la app** (si quieres cambiar algo del plan más adelante): subes el
 `index.html` nuevo al repositorio y la app se actualiza sola la próxima vez que la abras
 con conexión. Tus datos no se tocan.
@@ -103,8 +106,18 @@ que esté vigente (por ejemplo `claude-sonnet-5`). No hay que tocar nada más.
 > Úsala para llevar el registro sin esfuerzo, no como una báscula. Si un plato lo conoces
 > bien, tu ojo será mejor que la foto.
 
-También puedes registrar todo **a mano**, con un buscador de 76 alimentos habituales (por
-100 g) y comidas favoritas guardadas para añadirlas de un toque. No hace falta clave para eso.
+**Mejor todavía que la foto: describir el plato.** En **Dieta → Comidas → Describirlo** escribes
+"150 g de pollo, 2 huevos y una cucharada de aceite" y sale el desglose ingrediente a ingrediente.
+Es más preciso que la foto porque los gramos los pones tú, y cuesta la décima parte. Además,
+la app le pasa a Claude su propia tabla de 137 alimentos y las 33 recetas del plan, así que los
+números salen de ahí y no de lo que el modelo se invente.
+
+Con foto o con texto, **el resultado sale desglosado por ingredientes con sus gramos**: tocas el
+gramaje que no cuadre y el total se recalcula solo. Si algo se le ha ido, hay una casilla para
+darle una aclaración ("el pollo eran 250 g, sin aceite") y que lo repase.
+
+Y si no tienes clave o estás sin cobertura, el botón **Calcular sin la API** reconoce lo que has
+escrito contra la tabla de alimentos y hace las cuentas en el propio móvil.
 
 ---
 
@@ -114,13 +127,32 @@ También puedes registrar todo **a mano**, con un buscador de 76 alimentos habit
   de cada ejercicio para marcarlo hecho. En los días de fuerza escribe el peso y las
   repeticiones de cada serie; al marcar el ✓ de una serie arranca solo el descanso de 90 s
   y te vibra el móvil cuando toca la siguiente. El botón **i** de cada ejercicio abre su
-  ficha: posición de partida, ejecución, errores típicos, qué debes notar, y un vídeo.
+  ficha: patrón, nivel y material, posición de partida, ejecución, errores típicos, qué debes
+  notar, un vídeo, y el mismo movimiento **un escalón más fácil o más exigente**.
+  El botón **⇄** cambia el ejercicio: te propone alternativas del mismo patrón que puedas hacer
+  con mancuernas, comba, esterilla y una silla. El cambio **se guarda para ese día y esa
+  variante** (la próxima vez ya sale cambiado) y se deshace cuando quieras. Si un ejercicio no
+  te va, *No quiero volver a hacerlo* y no vuelve a aparecer entre las alternativas.
+  Los cambios y los descartes se gestionan en **Más → Ejercicios**.
 - **Ciclo** — los 10 días de un vistazo, con lo ya completado en verde. Toca cualquier día
   para verlo.
 - **Peso** — te pesas, y la app calcula la media de 7 días y la compara con la curva
   objetivo. También cintura.
-- **Dieta** — pestaña **Comidas**: lo que llevas comido hoy en calorías y proteína, foto
-  del plato o alta a mano, y la media de los últimos días (que es el número que de verdad
-  decide si bajas de peso). El resto de pestañas: tus calorías y macros (se ajustan solos
-  cuando bajes de 98 y de 92 kg), día tipo, qué comer, qué no, y cómo salir a comer fuera.
-- **Más** — tus récords por ejercicio, las 6 reglas y la copia de seguridad.
+- **Dieta** — pestaña **Comidas**: lo que llevas comido hoy en calorías y proteína (foto,
+  descripción por texto, a mano o directo desde el menú), y la media de los últimos días, que es
+  el número que de verdad decide si bajas de peso.
+  **Menú**: los 7 días de la semana con las cinco comidas, sus calorías y su proteína. Las
+  cantidades de arroz, patata, pan, fruta y aceite **se ajustan solas** a tu objetivo del día;
+  la proteína y la verdura no se tocan. Botón de **lista de la compra** de la semana entera y
+  de registrar el día completo de un toque.
+  **Recetas**: 33 recetas, todas de 20 minutos o menos, con los ingredientes en gramos, las
+  calorías y la proteína de cada uno, y los pasos. Las de *batch cooking* están pensadas para
+  multiplicarlas por tres el domingo.
+  El resto de pestañas: tus calorías y macros (se ajustan solos al cruzar 98, 92 y 86 kg), qué
+  comer, qué no, y cómo salir a comer fuera.
+- **Más** — tus récords por ejercicio, los cambios y descartes de ejercicios, las 6 reglas y la
+  copia de seguridad.
+
+El catálogo tiene **64 fichas de ejercicio**: los del plan y los que se ofrecen como alternativa.
+Cada serie que registras guarda el nombre del ejercicio que hiciste, así que **cambiar un ejercicio
+no descoloca tus récords antiguos**.
