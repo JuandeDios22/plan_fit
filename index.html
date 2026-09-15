@@ -16,7 +16,7 @@
 :root{
   --bg:#0f0f0e; --s1:#1a1a19; --s2:#232322; --s3:#2c2c2a; --bd:#33332f;
   --tx:#ffffff; --tx2:#c3c2b7; --tx3:#8f8e85;
-  --blue:#3987e5; --orange:#d95926; --green:#3fa93f; --yellow:#c98500; --red:#e66767;
+  --blue:#3987e5; --orange:#d95926; --green:#3fa93f; --yellow:#c98500; --red:#e66767; --violet:#9683f0;
   --safe-b:env(safe-area-inset-bottom,0px);
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -108,6 +108,7 @@ section.on{display:block}
 .p-c{background:color-mix(in srgb,var(--orange) 22%,transparent);color:var(--orange)}
 .p-r{background:var(--s2);color:var(--tx3)}
 .p-d{background:color-mix(in srgb,var(--yellow) 20%,transparent);color:var(--yellow)}
+.p-co{background:color-mix(in srgb,var(--violet) 22%,transparent);color:var(--violet)}
 .bar{height:6px;background:var(--s2);border-radius:99px;overflow:hidden;margin:9px 0 3px}
 .bar i{display:block;height:100%;background:var(--green);border-radius:99px;transition:width .3s}
 table{width:100%;border-collapse:collapse;font-size:13.5px}
@@ -204,6 +205,35 @@ details .db{padding:0 15px 14px;border-top:1px solid var(--bd);padding-top:12px}
 .ingr .ing span{position:absolute;right:9px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--tx3)}
 .inglist p{padding:10px 0}
 textarea{resize:vertical;line-height:1.45}
+/* coach */
+.ct{font-size:17px;font-weight:700;letter-spacing:-.02em;margin-bottom:6px}
+#chLog{margin-bottom:12px}
+.ch{display:flex;margin-bottom:11px}
+.ch.u{justify-content:flex-end}
+.ch .b{border:1px solid var(--bd);border-radius:15px;padding:11px 14px}
+.ch.u .b{max-width:88%;background:var(--s3);border-bottom-right-radius:5px}
+.ch.a .b{width:100%;background:var(--s1);border-bottom-left-radius:5px}
+.ch .b p{margin:0 0 9px;font-size:14.5px}
+.ch .b p:last-child{margin-bottom:0}
+.ch.u .b p{color:var(--tx)}
+.ch .b ul{margin:0 0 9px;padding-left:18px;font-size:14.5px}
+.ch .b ul:last-child{margin-bottom:0}
+.ch .b .chh{color:var(--tx);font-weight:650;margin-top:13px}
+.ch .b .chh:first-child{margin-top:0}
+.ch .b code{background:var(--s2);border-radius:5px;padding:1px 5px;font-size:12.5px}
+.acc{display:block;background:color-mix(in srgb,var(--violet) 12%,var(--s2));
+  border:1px solid color-mix(in srgb,var(--violet) 32%,var(--bd));border-radius:10px;
+  padding:9px 11px;margin-top:9px;font-size:12.5px;color:var(--tx2);line-height:1.45}
+.acc b{display:block;color:var(--violet);font-size:10.5px;text-transform:uppercase;
+  letter-spacing:.07em;margin-bottom:3px}
+.acc.mal{background:color-mix(in srgb,var(--red) 10%,var(--s2));
+  border-color:color-mix(in srgb,var(--red) 32%,var(--bd))}
+.acc.mal b{color:var(--red)}
+.chbar{display:flex;gap:9px;align-items:flex-end}
+.chbar textarea{flex:1;resize:none;max-height:130px;border-radius:14px;padding:11px 13px}
+.chgo{width:44px;height:44px;flex:none;border-radius:14px;padding:0;display:grid;place-items:center}
+.chgo svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:2.3;stroke-linecap:round;stroke-linejoin:round}
+.chgo:disabled,.chbar textarea:disabled{opacity:.45}
 </style>
 </head>
 <body>
@@ -225,6 +255,9 @@ textarea{resize:vertical;line-height:1.45}
 
 <!-- ─────────── CICLO ─────────── -->
 <section id="v-ciclo"></section>
+
+<!-- ─────────── COACH ─────────── -->
+<section id="v-coach"></section>
 
 <!-- ─────────── PESO ─────────── -->
 <section id="v-peso"></section>
@@ -252,6 +285,7 @@ textarea{resize:vertical;line-height:1.45}
 <nav><div class="in">
   <button data-v="hoy" class="on"><svg viewBox="0 0 24 24"><path d="M6.5 6.5h11M6.5 12h11M6.5 17.5h11"/><circle cx="3.5" cy="6.5" r="1.2"/><circle cx="3.5" cy="12" r="1.2"/><circle cx="3.5" cy="17.5" r="1.2"/></svg>Hoy</button>
   <button data-v="ciclo"><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.5-5.8"/><path d="M20 3v4h-4"/></svg>Ciclo</button>
+  <button data-v="coach"><svg viewBox="0 0 24 24"><path d="M20.5 12.5c0 3.9-3.8 7-8.5 7-1 0-2-.15-2.9-.42L4 20.5l1.5-3.4A6.6 6.6 0 0 1 3.5 12.5c0-3.9 3.8-7 8.5-7s8.5 3.1 8.5 7z"/></svg>Coach</button>
   <button data-v="peso"><svg viewBox="0 0 24 24"><path d="M3 17l5-6 4 3 5-7 4 4"/></svg>Peso</button>
   <button data-v="dieta"><svg viewBox="0 0 24 24"><path d="M6 3v8a2.5 2.5 0 0 0 5 0V3M8.5 11v10"/><path d="M17 3c-1.5 2-2 4-2 6.5 0 1.5.7 2.5 2 2.5v9"/></svg>Dieta</button>
   <button data-v="mas"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="19" cy="12" r="1.4"/></svg>Más</button>
@@ -466,15 +500,20 @@ const BLOQUES = [
 
 /* ══════════════════ ESTADO ══════════════════ */
 const KEY='juandePlan_v1';
+const API0={key:'',model:'claude-haiku-4-5',coach:'claude-opus-5'};
 let D = load();
 function load(){
   try{ const r=JSON.parse(localStorage.getItem(KEY)); if(r&&r.v===1) return r; }catch(err){}
-  return {v:1, offset:0, log:{}, peso:{}, cintura:{}, notas:{}, comidas:{}, favs:[], cambios:{}, veto:[], api:{key:'',model:'claude-haiku-4-5'}};
+  return {v:1, offset:0, log:{}, peso:{}, cintura:{}, notas:{}, comidas:{}, favs:[], cambios:{}, veto:[],
+          plan:{}, anchor:null, chat:[], hist:[], api:Object.assign({},API0)};
 }
 // compatibilidad con copias antiguas
 if(!D.comidas) D.comidas={}; if(!D.favs) D.favs=[];
-if(!D.api) D.api={key:'',model:'claude-haiku-4-5'};
+if(!D.api) D.api=Object.assign({},API0);
+if(!D.api.coach) D.api.coach='claude-opus-5';
 if(!D.cambios) D.cambios={}; if(!D.veto) D.veto=[];
+if(!D.plan) D.plan={}; if(!D.chat) D.chat=[]; if(!D.hist) D.hist=[];
+if(D.anchor===undefined) D.anchor=null;
 let saveT=null;
 function save(){ clearTimeout(saveT); saveT=setTimeout(()=>{
   try{ localStorage.setItem(KEY, JSON.stringify(D)); }catch(err){ toast('No se pudo guardar'); }
@@ -486,14 +525,26 @@ function iso(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0
 function parse(s){ const [y,m,d]=s.split('-').map(Number); return new Date(y,m-1,d); }
 function hoyISO(){ return iso(new Date()); }
 function diasDesde(a,b){ return Math.round((parse(b)-parse(a))/DAY); }
+/* Ancla del ciclo. Por defecto el arranque original; el coach puede reiniciarla
+   (D.anchor = {f:fecha que pasa a ser el día 1, c:número de ciclo, b:bloque forzado}). */
+function anclaF(){ return (D.anchor && D.anchor.f) || START; }
+function anclaC(){ return (D.anchor && D.anchor.c) || 1; }
 function estado(fecha){
-  const n = diasDesde(START, fecha) + D.offset;
-  const i = n<0 ? 0 : n;
-  return { dia: (i%10)+1, ciclo: Math.floor(i/10)+1, abs:i };
+  const n = diasDesde(anclaF(), fecha) + D.offset;
+  if(n<0) return { dia:1, ciclo:anclaC(), abs:0, previo:true };
+  return { dia:(n%10)+1, ciclo:anclaC()+Math.floor(n/10), abs:n };
+}
+/* fecha en la que cae un día concreto de un ciclo */
+function fechaDe(ciclo,dia){
+  const n=(ciclo-anclaC())*10+(dia-1);
+  const d=parse(anclaF()); d.setDate(d.getDate()+n-D.offset); return iso(d);
 }
 function variante(ciclo){ return ['A','B','C'][(ciclo-1)%3]; }
 function descarga(ciclo){ return ciclo>=6 && ciclo%3===0; }
-function bloque(ciclo){ return BLOQUES.find(b=>ciclo>=b.c[0]&&ciclo<=b.c[1]) || BLOQUES[BLOQUES.length-1]; }
+function bloque(ciclo){
+  if(D.anchor && D.anchor.b!=null && BLOQUES[D.anchor.b]) return BLOQUES[D.anchor.b];
+  return BLOQUES.find(b=>ciclo>=b.c[0]&&ciclo<=b.c[1]) || BLOQUES[BLOQUES.length-1];
+}
 function semanaPlan(fecha){ return Math.floor(diasDesde(START,fecha)/7); }
 function fmtFecha(s){
   const M=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
@@ -530,7 +581,7 @@ function stopT(){ clearInterval(tInt); $('#timer').classList.remove('on'); }
 function claveDia(f){ const st=estado(f); return 'c'+st.ciclo+'d'+st.dia; }
 
 function renderHoy(){
-  const f=VER, st=estado(f), P=PLAN[st.dia], vr=variante(st.ciclo), V=P.v[vr];
+  const f=VER, st=estado(f), vr=variante(st.ciclo), P=diaMeta(st.dia), V=sesion(st.dia,vr);
   const dl=descarga(st.ciclo)&&st.dia<=5, bl=bloque(st.ciclo);
   const key=claveDia(f), L=D.log[key]||{};
   const esHoy = f===hoyISO();
@@ -547,6 +598,19 @@ function renderHoy(){
     <button class="btn-s btn-gh" onclick="mueveDia(1)">Siguiente ›</button>
   </div>`;
 
+  // días anteriores al último reinicio: no pertenecen a ningún ciclo
+  if(st.previo){
+    h+=`<div class="card">
+      <div style="font-size:19px;font-weight:700;letter-spacing:-.025em">Antes del reinicio</div>
+      <p style="margin:9px 0 0">El plan se reinició el <strong>${fmtFecha(anclaF())}</strong>, así que este día
+      se queda fuera del ciclo actual. Lo que entrenaste antes sigue contando en tus récords y en tu progreso.</p>
+    </div>
+    <button class="btn-w btn-p" onclick="irA(hoyISO())">Ir a hoy</button>`;
+    $('#v-hoy').innerHTML=h;
+    $('#hTitle').textContent=fmtFecha(f); $('#hSub').textContent='Antes del reinicio'; $('#hChip').textContent='—';
+    return;
+  }
+
   // cabecera de sesión
   h+=`<div class="card">
     <div class="row between" style="align-items:flex-start">
@@ -556,6 +620,7 @@ function renderHoy(){
           <span class="pill p-r">Ciclo ${st.ciclo}</span>
           <span class="pill p-r">Variante ${vr}</span>
           ${dl?'<span class="pill p-d">Descarga</span>':''}
+          ${tocado(st.dia,vr)?'<span class="pill p-co">Coach</span>':''}
         </div>
         <div style="font-size:19px;font-weight:700;letter-spacing:-.025em;line-height:1.25">${esc(P.n)}</div>
         <div class="muted" style="margin-top:3px">${esc(V.t)} · ${P.d}</div>
@@ -702,13 +767,13 @@ function renderCiclo(){
   let h=`<h2>Ciclo ${st.ciclo} · ${bl.n}</h2>
   <p>${esc(bl.f)} <strong>${bl.r}</strong>.</p>`;
 
+  if(D.anchor) h+=`<p class="muted" style="margin:-6px 0 12px">Reiniciado el ${fmtFecha(anclaF())}.</p>`;
+
   // días del ciclo actual
-  const base = diasDesde(START,hoyISO()) + D.offset - (st.dia-1);
   h+=`<div class="card" style="padding:6px 0">`;
   for(let d=1;d<=10;d++){
-    const dd=parse(START); dd.setDate(dd.getDate()+base+(d-1)-D.offset);
-    const fISO=iso(dd), L=D.log['c'+st.ciclo+'d'+d];
-    const P=PLAN[d], hecho=L&&L.fin, act=d===st.dia;
+    const fISO=fechaDe(st.ciclo,d), L=D.log['c'+st.ciclo+'d'+d];
+    const P=diaMeta(d), hecho=L&&L.fin, act=d===st.dia;
     const pk={fuerza:'p-f',cardio:'p-c',suave:'p-r',descanso:'p-r'}[P.k];
     h+=`<div class="row" style="padding:11px 15px;gap:12px;${d<10?'border-bottom:1px solid var(--bd);':''}
         ${act?'background:var(--s2)':''}" onclick="irA('${fISO}')">
@@ -718,6 +783,7 @@ function renderCiclo(){
         <div style="font-size:14px;font-weight:${act?700:600};letter-spacing:-.01em">${esc(P.n)}</div>
         <div class="muted" style="font-size:11.5px">${fmtFecha(fISO)} · ${P.d}</div>
       </div>
+      ${tocado(d,variante(st.ciclo))?'<span class="pill p-co">Coach</span>':''}
       <span class="pill ${pk}">${P.k==='fuerza'?'Fuerza':P.k==='cardio'?'Cardio':P.k==='suave'?'Suave':'Descanso'}</span>
     </div>`;
   }
@@ -1065,14 +1131,36 @@ function renderMas(){
     <li><strong>10.000-12.000 pasos fuera del entreno.</strong> La mitad silenciosa del gasto.</li>
   </ul></div>
 
-  <h2>Reconocimiento por foto</h2>
+  <h2>Coach</h2>
+  ${(()=>{
+    const mods=Object.keys(D.plan).filter(k=>/v[ABC]$/.test(k)).length;
+    let t='<div class="card">';
+    t+=`<p style="margin:0 0 ${(mods||D.anchor)?'11px':'0'}">${mods
+        ? 'El coach ha reescrito <strong>'+mods+(mods>1?' sesiones':' sesión')+'</strong> del ciclo.'
+        : 'El plan de entrenamiento está tal y como venía.'}
+      ${D.anchor?' Los ciclos se reiniciaron el <strong>'+fmtFecha(anclaF())+'</strong>.':''}</p>`;
+    if(mods||D.anchor) t+='<button class="btn-w" onclick="restauraTodo()">Volver al plan original</button>';
+    t+='</div>';
+    if(D.hist.length){
+      t+='<h3>Deshacer cambios</h3><div class="card" style="padding:4px 0"><table>';
+      D.hist.forEach((s,i)=>{ t+=`<tr><td class="k">${esc(s.desc)}<br><span class="muted">${fmtMom(s.t)}</span></td>
+        <td style="text-align:right"><button class="btn-s" onclick="deshaceHist(${i})">Volver aquí</button></td></tr>`; });
+      t+='</table></div><p class="muted">Cada línea es cómo estaba el plan justo antes de ese cambio.</p>';
+    }
+    return t; })()}
+
+  <h2>Claude</h2>
   <div class="card">
     <div class="row between" style="margin-bottom:11px">
-      <div><div style="font-size:14px;font-weight:620">Claude · visión</div>
-      <div class="muted">${D.api.key?'Configurado · '+esc(D.api.model):'Sin configurar'}</div></div>
-      <span class="pill ${D.api.key?'p-f':'p-r'}">${D.api.key?'Activo':'Apagado'}</span>
+      <div><div style="font-size:14px;font-weight:620">Clave de API</div>
+      <div class="muted">${D.api.key?'Guardada en este móvil':'Sin configurar'}</div></div>
+      <span class="pill ${D.api.key?'p-f':'p-r'}">${D.api.key?'Activa':'Apagada'}</span>
     </div>
-    <button class="btn-w" onclick="ajustesIA()">${D.api.key?'Cambiar clave o modelo':'Configurar la clave'}</button>
+    <table style="margin-bottom:12px">
+      <tr><td class="k">Coach</td><td style="text-align:right">${esc(modeloCoach())}</td></tr>
+      <tr><td class="k">Fotos de comida</td><td style="text-align:right">${esc(D.api.model||'claude-haiku-4-5')}</td></tr>
+    </table>
+    <button class="btn-w" onclick="ajustesIA()">${D.api.key?'Cambiar clave o modelos':'Configurar la clave'}</button>
     <div class="muted" style="margin-top:10px">La clave se guarda solo en este móvil y va directa a la API de Anthropic. No pasa por ningún servidor intermedio ni se sube al repositorio.</div>
   </div>
 
@@ -1094,7 +1182,7 @@ function renderMas(){
     let t='<h3>Ejercicios cambiados</h3>';
     if(ks.length){ t+='<div class="card" style="padding:4px 0"><table>';
       ks.sort().forEach(k=>{ const m=k.match(/^d(\d+)v([ABC])e(\d+)$/); if(!m) return;
-        const orig=PLAN[+m[1]].v[m[2]].ex[+m[3]];
+        const orig=sesion(+m[1],m[2]).ex[+m[3]];
         t+=`<tr><td class="k">${esc(D.cambios[k])}<br><span class="muted">día ${m[1]} · variante ${m[2]} · en lugar de ${esc(limpiaNombre(orig?orig.n:'—'))}</span></td>
           <td style="text-align:right"><button class="btn-s" onclick="deshaceEj(${+m[1]},'${m[2]}',${+m[3]})">Deshacer</button></td></tr>`; });
       t+='</table></div><button class="btn-w" style="margin-bottom:11px" onclick="reponEj()">Deshacer todos los cambios</button>';
@@ -1124,8 +1212,8 @@ function records(){
   const best={};
   Object.entries(D.log).forEach(([k,L])=>{
     const dia=+k.split('d')[1], ciclo=+k.slice(1).split('d')[0];
-    const P=PLAN[dia]; if(!P) return;
-    const V=P.v[variante(ciclo)]; if(!V) return;
+    if(!PLAN[dia]) return;
+    if(!sesion(dia,variante(ciclo))) return;
     exDia(dia,variante(ciclo)).forEach((x,i)=>{
       const le=L['e'+i]; if(!le||!le.sets) return;
       le.sets.forEach(s=>{ if(!s||!s.w||!s.r) return;
@@ -1624,8 +1712,21 @@ function vecino(n,dir){
 /* ══════════════════ CAMBIOS DE EJERCICIO ══════════════════ */
 function claveSw(dia,vr,i){ return 'd'+dia+'v'+vr+'e'+i; }
 /* la sesión con los cambios que hayas guardado ya aplicados */
+/* ── El plan que manda: PLAN original + lo que haya cambiado el coach ──
+   D.plan['d3']   = {n,k,d,w,note}      → cabecera del día 3
+   D.plan['d3vA'] = {t, ex:[{n,s,r,nt}]} → sesión del día 3, variante A     */
+function diaMeta(dia){
+  const ov=D.plan['d'+dia];
+  return ov ? Object.assign({}, PLAN[dia], ov) : PLAN[dia];
+}
+function sesion(dia,vr){
+  const base=PLAN[dia].v[vr], ov=D.plan['d'+dia+'v'+vr];
+  if(!ov || !Array.isArray(ov.ex) || !ov.ex.length) return base;
+  return {t: ov.t || base.t, ex: ov.ex};
+}
+function tocado(dia,vr){ return !!(D.plan['d'+dia] || D.plan['d'+dia+'v'+vr]); }
 function exDia(dia,vr){
-  return PLAN[dia].v[vr].ex.map((x,i)=>{
+  return sesion(dia,vr).ex.map((x,i)=>{
     const n=D.cambios[claveSw(dia,vr,i)];
     if(!n) return x;
     const pref=(x.n.match(/^SS\d · /)||[''])[0];
@@ -1638,7 +1739,7 @@ function nombreEj(i){
   return x?x.n:'';
 }
 function cambiaEjercicio(dia,vr,i){
-  const EX=exDia(dia,vr), x=EX[i], orig=PLAN[dia].v[vr].ex[i];
+  const EX=exDia(dia,vr), x=EX[i], orig=sesion(dia,vr).ex[i];
   const nombre=limpiaNombre(x.n), I=infoEj(nombre);
   const alts=alternativas(nombre, EX.map(e=>e.n));
 
@@ -2552,23 +2653,27 @@ function confirmaComida(){
 
 /* — ajustes de la API — */
 function ajustesIA(desdeFoto){
-  abre(`<p class="sh-t">Reconocimiento por foto</p>
-  <p class="sh-s">${desdeFoto?'Necesitas una clave de Claude para usar la cámara. Se guarda solo en este móvil.':'Tu clave se guarda solo en este móvil, nunca se sube a ningún sitio.'}</p>
+  abre(`<p class="sh-t">Claude</p>
+  <p class="sh-s">${desdeFoto?'Necesitas una clave de Claude para esto. Se guarda solo en este móvil.':'Tu clave se guarda solo en este móvil, nunca se sube a ningún sitio.'}</p>
   <div class="gbox"><div class="gt">Cómo conseguir la clave</div>
     <p>1 · Entra en <b>console.anthropic.com</b> y crea una cuenta.<br>
        2 · Mete 5 $ de saldo en <b>Billing</b>.<br>
        3 · En <b>API keys</b> → <b>Create key</b>, cópiala y pégala aquí abajo.</p></div>
   <div class="gbox"><div class="gt">Cuánto cuesta</div>
-    <p>Con el modelo Haiku, cada foto sale por unos <b>0,003 $</b>. Aunque hagas 4 fotos al día hasta la boda, son menos de <b>3 $ en total</b>. Con 5 $ te sobra.</p></div>
+    <p>Cada <b>foto</b> de comida, con Haiku, sale por unos <b>0,003 $</b>.<br>
+       Cada respuesta del <b>coach</b>, con Opus, ronda los <b>0,03-0,10 $</b>: no es para charlar, es para reorganizar el plan.</p></div>
   <div class="fld"><label>Clave de API</label><input id="aK" type="password" value="${esc(D.api.key||'')}" placeholder="sk-ant-..."></div>
-  <div class="fld"><label>Modelo</label><input id="aM" value="${esc(D.api.model||'claude-haiku-4-5')}" placeholder="claude-haiku-4-5"></div>
-  <p class="muted" style="margin:-4px 0 14px">Si algún día ese modelo deja de existir, cámbialo aquí por el que toque (por ejemplo claude-sonnet-5). No hace falta tocar nada más.</p>
+  <div class="fld"><label>Modelo del coach</label><input id="aC" value="${esc(D.api.coach||'claude-opus-5')}" placeholder="claude-opus-5"></div>
+  <div class="fld"><label>Modelo de las fotos</label><input id="aM" value="${esc(D.api.model||'claude-haiku-4-5')}" placeholder="claude-haiku-4-5"></div>
+  <p class="muted" style="margin:-4px 0 14px">El coach tiene que razonar sobre todo tu plan, por eso lleva el modelo bueno. Si quieres gastar menos, pónle <b>claude-sonnet-5</b>. Si algún día un modelo deja de existir, cámbialo aquí por el que toque.</p>
   <button class="btn-p btn-w" style="margin-bottom:8px" onclick="guardaIA()">Guardar</button>
   <div class="grid2"><button onclick="probarIA()">Probar la clave</button><button onclick="cerrar()">Cerrar</button></div>`);
 }
 function guardaIA(){
-  D.api.key=$('#aK').value.trim(); D.api.model=$('#aM').value.trim()||'claude-haiku-4-5';
-  save(); toast('Guardado'); cerrar(); renderDieta(); renderMas();
+  D.api.key=$('#aK').value.trim();
+  D.api.model=$('#aM').value.trim()||'claude-haiku-4-5';
+  const c=$('#aC'); if(c) D.api.coach=c.value.trim()||'claude-opus-5';
+  save(); toast('Guardado'); cerrar(); renderDieta(); renderCoach(); renderMas();
 }
 async function probarIA(){
   const k=$('#aK').value.trim(), m=$('#aM').value.trim()||'claude-haiku-4-5';
@@ -2583,18 +2688,517 @@ async function probarIA(){
   }catch(err){ toast('Sin conexión con la API'); }
 }
 
+/* ══════════════════ COACH · EL CHAT QUE REESCRIBE EL PLAN ══════════════════ */
+
+/* ---------- lo que el coach ve de ti ---------- */
+
+/* el plan tal y como está ahora mismo */
+function planTexto(){
+  const out=[];
+  for(let d=1; d<=10; d++){
+    const P=diaMeta(d);
+    out.push('DÍA '+d+' · '+P.n+' · tipo='+P.k+' · '+P.d+(D.plan['d'+d]?' · [cabecera modificada]':''));
+    ['A','B','C'].forEach(vr=>{
+      if(d===10 && vr!=='A' && !D.plan['d10v'+vr]) return;
+      const S=sesion(d,vr);
+      out.push('  variante '+vr+': '+S.t+(D.plan['d'+d+'v'+vr]?' [modificada]':''));
+      S.ex.forEach((x,i)=>out.push('    '+i+' · '+x.n+' — '+x.s+' x '+x.r+(x.nt?' — '+x.nt:'')));
+    });
+  }
+  return out.join('\n');
+}
+
+/* qué has entrenado de verdad desde el ancla del ciclo */
+function adherencia(){
+  const hoy=hoyISO(), st=estado(hoy);
+  const filas=[], porDia={}, porTipo={};
+  let prog=0, fin=0, parc=0, d30=0;
+  for(let c=anclaC(); c<=st.ciclo; c++){
+    for(let d=1; d<=10; d++){
+      const f=fechaDe(c,d);
+      if(f>=hoy || diasDesde(f,hoy)>70) continue;
+      const P=diaMeta(d); if(P.k==='descanso') continue;
+      const L=D.log['c'+c+'d'+d]||{}, EX=exDia(d,variante(c));
+      const mk=EX.filter((_,i)=>L['e'+i]&&L['e'+i].done).length, ok=!!L.fin;
+      prog++; if(ok){ fin++; if(diasDesde(f,hoy)<=30) d30++; } else if(mk) parc++;
+      (porDia[d]=porDia[d]||[0,0])[0]++;       if(ok) porDia[d][1]++;
+      (porTipo[P.k]=porTipo[P.k]||[0,0])[0]++; if(ok) porTipo[P.k][1]++;
+      filas.push({f:f, d:d, n:P.n, ok:ok, mk:mk, tot:EX.length, nota:D.notas['c'+c+'d'+d]||''});
+    }
+  }
+  let ult=null;
+  Object.keys(D.log).forEach(k=>{ const L=D.log[k]; if(L&&L.fin&&(!ult||L.fin>ult)) ult=L.fin; });
+  return {prog:prog, fin:fin, parc:parc, d30:d30, filas:filas, porDia:porDia, porTipo:porTipo,
+    pct: prog?Math.round(fin/prog*100):0,
+    sem30: Math.round(d30/30*7*10)/10,
+    gap: ult?diasDesde(ult,hoy):null,
+    total: Object.keys(D.log).filter(k=>D.log[k]&&D.log[k].fin).length};
+}
+
+/* el estado, en texto, para el sistema */
+function contextoTexto(){
+  const hoy=hoyISO(), st=estado(hoy), bl=bloque(st.ciclo), A=adherencia();
+  const m7=media7(hoy), pes=(m7!=null?m7:ultimoPeso());
+  const sem=Math.max(0,Math.min(26,semanaPlan(hoy)));
+  const L=[];
+  L.push('HOY: '+hoy+' ('+diaSemana(hoy)+')');
+  L.push('CICLO: ciclo '+st.ciclo+', día '+st.dia+', variante '+variante(st.ciclo)+
+         (descarga(st.ciclo)?' · ciclo de descarga (60 % de las series)':''));
+  L.push('BLOQUE: '+bl.n+' — '+bl.f+' ('+bl.r+')');
+  L.push('ANCLA: el día 1 del ciclo '+anclaC()+' cayó el '+anclaF()+
+         (D.anchor?' (reiniciado)':' (arranque original del plan)')+'. Desfase manual: '+D.offset+' días.');
+  L.push('BODA: '+BODA+' — quedan '+diasDesde(hoy,BODA)+' días.');
+  L.push('PESO: '+(pes!=null?pes.toFixed(1)+' kg':'sin registrar')+
+         ' · media de 7 días '+(m7!=null?m7.toFixed(1)+' kg':'—')+
+         ' · la curva objetivo pide '+CURVA[sem]+' kg en la semana '+sem+
+         ' · empezó en '+PESO0+' kg · meta '+META+' kg · altura '+ALTURA+' m.');
+  L.push('MATERIAL: entrena en casa con mancuernas, comba, rueda abdominal, esterilla y una silla. No tiene gimnasio ni barra.');
+  L.push('');
+  L.push('ADHERENCIA REAL (sesiones ya pasadas desde el ancla, ventana de 10 semanas):');
+  L.push('  programadas '+A.prog+' · completadas '+A.fin+' · empezadas y abandonadas '+A.parc+
+         ' · ni tocadas '+(A.prog-A.fin-A.parc)+'  →  '+A.pct+' % de cumplimiento');
+  L.push('  entrenos completados en los últimos 30 días: '+A.d30+' (≈ '+A.sem30+' por semana)');
+  L.push('  días desde el último entreno completado: '+(A.gap==null?'ninguno registrado nunca':A.gap));
+  L.push('  sesiones completadas en toda la historia de la app: '+A.total);
+  const pd=Object.keys(A.porDia).map(d=>'d'+d+' '+A.porDia[d][1]+'/'+A.porDia[d][0]).join(' · ');
+  if(pd) L.push('  por día del ciclo (completadas/programadas): '+pd);
+  const pt=Object.keys(A.porTipo).map(k=>k+' '+A.porTipo[k][1]+'/'+A.porTipo[k][0]).join(' · ');
+  if(pt) L.push('  por tipo de sesión: '+pt);
+  L.push('');
+  L.push('ÚLTIMAS SESIONES PROGRAMADAS (fecha · día del ciclo · sesión · resultado):');
+  A.filas.slice(-24).forEach(r=>L.push('  '+r.f+' · d'+r.d+' · '+r.n+' · '+
+    (r.ok?'COMPLETADA':(r.mk?'a medias, '+r.mk+' de '+r.tot+' ejercicios':'NO HECHA'))+
+    (r.nota?' · nota suya: "'+r.nota.slice(0,90)+'"':'')));
+  if(!A.filas.length) L.push('  (todavía no ha pasado ninguna sesión desde el ancla)');
+  const R=records();
+  if(R.length){ L.push(''); L.push('MEJORES MARCAS: '+R.slice(0,12).map(r=>r.n+' '+r.w+' kg x '+r.r).join(' · ')); }
+  const cam=Object.keys(D.cambios);
+  if(cam.length){ L.push(''); L.push('EJERCICIOS QUE HA CAMBIADO A MANO: '+cam.map(k=>{
+      const m=k.match(/^d(\d+)v([ABC])e(\d+)$/); return m?('día '+m[1]+' var.'+m[2]+' → '+D.cambios[k]):'';
+    }).filter(Boolean).join(' · ')); }
+  if(D.veto.length) L.push('EJERCICIOS QUE HA DESCARTADO (no se los propongas): '+D.veto.join(' · '));
+  return L.join('\n');
+}
+
+function catalogoEj(){ return GUIA.map(o=>o.t).join(' · '); }
+
+/* ---------- las herramientas que puede usar ---------- */
+const MUTA={reescribir_sesion:1, restaurar_plan:1, reiniciar_ciclo:1, mover_ciclo:1};
+
+const HCOACH=[
+{name:'reescribir_sesion',
+ description:'Reescribe los ejercicios de una sesión del ciclo de 10 días. El cambio se guarda para ese día y esa variante, así que vale para todos los ciclos futuros en los que toque esa variante. Úsala tantas veces como haga falta, varias a la vez en la misma respuesta, para reestructurar el plan entero.',
+ input_schema:{type:'object',properties:{
+   dia:{type:'integer',description:'Día del ciclo, del 1 al 10'},
+   variante:{type:'string',enum:['A','B','C','todas'],description:'Variante a reescribir. "todas" pone los mismos ejercicios en A, B y C.'},
+   titulo:{type:'string',description:'Título corto de la variante, por ejemplo "Clásico" o "Densidad · superseries, 45 s de descanso"'},
+   ejercicios:{type:'array',description:'La lista completa de ejercicios de la sesión, en orden',
+     items:{type:'object',properties:{
+       n:{type:'string',description:'Nombre del ejercicio. Usa uno del catálogo siempre que puedas para que la app pueda enseñar su ficha.'},
+       s:{type:'integer',description:'Número de series, de 1 a 8'},
+       r:{type:'string',description:'Repeticiones o duración: "10-12", "máx", "15", "30 s", "20 min"'},
+       nt:{type:'string',description:'Nota breve de técnica o de intención. Cadena vacía si no hace falta.'}},
+     required:['n','s','r']}},
+   nombre_dia:{type:'string',description:'Opcional. Renombra el día entero, por ejemplo "Fuerza · Empuje". Afecta a las tres variantes.'},
+   tipo:{type:'string',enum:['fuerza','cardio','suave','descanso'],description:'Opcional. Cambia el tipo del día: decide el color y si se registran pesos y repeticiones.'},
+   duracion:{type:'string',description:'Opcional. Duración estimada del día, por ejemplo "40 min".'},
+   calentamiento:{type:'string',description:'Opcional. El calentamiento del día, en una línea.'},
+   resumen:{type:'string',description:'Una frase en español contando el cambio; se guarda en el historial por si quiere deshacerlo.'}},
+  required:['dia','variante','ejercicios','resumen']}},
+
+{name:'restaurar_plan',
+ description:'Deshace los cambios y devuelve el plan original. Sin día, lo devuelve entero.',
+ input_schema:{type:'object',properties:{
+   dia:{type:'integer',description:'Opcional. Solo ese día; si no lo pones, el plan entero.'},
+   variante:{type:'string',enum:['A','B','C','todas'],description:'Opcional. Solo esa variante del día.'},
+   resumen:{type:'string',description:'Una frase en español contando qué has restaurado.'}},
+  required:['resumen']}},
+
+{name:'reiniciar_ciclo',
+ description:'Vuelve a empezar los ciclos: la fecha que le des pasa a ser el día 1 de un ciclo nuevo. El historial anterior se conserva intacto, con sus récords y sus sesiones hechas. Úsala cuando quiera empezar de cero o cuando lleve tanto tiempo descolgado que no tenga sentido seguir donde estaba.',
+ input_schema:{type:'object',properties:{
+   fecha:{type:'string',description:'Fecha AAAA-MM-DD que pasa a ser el día 1. Si no la pones, hoy.'},
+   bloque:{type:'string',enum:['Adaptación','Construcción','Intensificación','Definición','Recta final','automático'],
+     description:'Bloque de entrenamiento en el que se retoma. "automático" lo deduce del número de ciclo. Si vuelve de un parón largo, "Adaptación".'},
+   resumen:{type:'string',description:'Una frase en español contando el reinicio.'}},
+  required:['resumen']}},
+
+{name:'mover_ciclo',
+ description:'Mueve el ciclo unos días sin reiniciarlo, para recuadrarlo con lo que está haciendo de verdad.',
+ input_schema:{type:'object',properties:{
+   dias:{type:'integer',description:'Positivo adelanta el ciclo (hoy pasa a ser el día siguiente); negativo lo retrasa.'},
+   resumen:{type:'string',description:'Una frase en español contando el ajuste.'}},
+  required:['dias','resumen']}}
+];
+
+/* ---------- aplicar una herramienta ---------- */
+function aplicaHerr(name,a){
+  if(name==='reescribir_sesion'){
+    const d=Math.round(+a.dia);
+    if(!PLAN[d]) return 'Error: el día '+a.dia+' no existe. Van del 1 al 10.';
+    const vrs = a.variante==='todas' ? ['A','B','C'] : [a.variante];
+    if(vrs.some(v=>'ABC'.indexOf(v)<0)) return 'Error: la variante tiene que ser A, B, C o todas.';
+    const ex=(a.ejercicios||[]).map(x=>({
+        n:String(x.n||'').trim().slice(0,70),
+        s:Math.max(1,Math.min(8,Math.round(+x.s)||1)),
+        r:String(x.r||'').trim().slice(0,40)||'10',
+        nt:String(x.nt||'').trim().slice(0,170)
+      })).filter(x=>x.n).slice(0,14);
+    if(!ex.length) return 'Error: hace falta al menos un ejercicio.';
+    vrs.forEach(vr=>{
+      D.plan['d'+d+'v'+vr]={t:String(a.titulo||sesion(d,vr).t||'Sesión').slice(0,60), ex:ex};
+      Object.keys(D.cambios).forEach(k=>{ if(k.indexOf('d'+d+'v'+vr+'e')===0) delete D.cambios[k]; });
+    });
+    const meta={};
+    if(a.nombre_dia) meta.n=String(a.nombre_dia).slice(0,60);
+    if(a.tipo)       meta.k=a.tipo;
+    if(a.duracion)   meta.d=String(a.duracion).slice(0,24);
+    if(a.calentamiento!==undefined) meta.w=String(a.calentamiento).slice(0,420);
+    if(Object.keys(meta).length) D.plan['d'+d]=Object.assign({},D.plan['d'+d]||{},meta);
+    save();
+    return 'Hecho: día '+d+', variante '+vrs.join(' + ')+' — '+ex.length+' ejercicios. Ya está guardado en su móvil.';
+  }
+  if(name==='restaurar_plan'){
+    if(a.dia){
+      const d=Math.round(+a.dia);
+      const vrs=(!a.variante||a.variante==='todas')?['A','B','C']:[a.variante];
+      delete D.plan['d'+d];
+      vrs.forEach(vr=>delete D.plan['d'+d+'v'+vr]);
+      save(); return 'Día '+d+' devuelto al plan original.';
+    }
+    D.plan={}; save(); return 'Todo el plan vuelve al original.';
+  }
+  if(name==='reiniciar_ciclo'){
+    const f=/^\d{4}-\d{2}-\d{2}$/.test(a.fecha||'') ? a.fecha : hoyISO();
+    let max=estado(hoyISO()).ciclo;
+    Object.keys(D.log).forEach(k=>{ const m=k.match(/^c(\d+)d/); if(m) max=Math.max(max,+m[1]); });
+    const c=max+1;
+    let b=null;
+    if(a.bloque && a.bloque!=='automático'){ const i=BLOQUES.map(x=>x.n).indexOf(a.bloque); if(i>=0) b=i; }
+    D.anchor={f:f,c:c,b:b}; D.offset=0; save();
+    const st=estado(hoyISO());
+    return 'Ciclo reiniciado: el '+f+' pasa a ser el día 1 del ciclo '+c+
+      (b!=null?', bloque '+BLOQUES[b].n:'')+'. Hoy le toca el día '+st.dia+', variante '+variante(st.ciclo)+
+      '. El historial anterior se conserva.';
+  }
+  if(name==='mover_ciclo'){
+    const n=Math.max(-9,Math.min(9,Math.round(+a.dias)||0));
+    D.offset+=n; save();
+    const st=estado(hoyISO());
+    return 'Ciclo movido '+n+' días. Hoy es el día '+st.dia+' del ciclo '+st.ciclo+'.';
+  }
+  return 'Error: no conozco la herramienta "'+name+'".';
+}
+
+/* copia de seguridad antes de cada tanda de cambios */
+function snapshot(desc){
+  D.hist.unshift({t:Date.now(), desc:String(desc||'Cambio del coach').slice(0,150),
+    plan:JSON.parse(JSON.stringify(D.plan)),
+    anchor:D.anchor?Object.assign({},D.anchor):null, offset:D.offset});
+  if(D.hist.length>12) D.hist.length=12;
+}
+function deshaceHist(i){
+  const s=D.hist[i]; if(!s) return;
+  if(!confirm('El plan vuelve a como estaba antes de «'+s.desc+'». ¿Seguro?')) return;
+  D.plan=s.plan; D.anchor=s.anchor; D.offset=s.offset;
+  D.hist=D.hist.slice(i+1);
+  save(); VER=hoyISO(); renderTodo(); toast('Plan restaurado');
+}
+function restauraTodo(){
+  if(!confirm('Se deshacen todos los cambios del coach y vuelve el plan original. El ciclo se queda donde está. ¿Seguro?')) return;
+  snapshot('Volver al plan original');
+  D.plan={}; save(); renderTodo(); toast('Plan original restaurado');
+}
+
+function fmtMom(ts){ const d=new Date(ts);
+  return fmtFecha(iso(d))+' · '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); }
+
+/* ---------- la llamada a Claude ---------- */
+function modeloCoach(){ return D.api.coach||'claude-opus-5'; }
+function piensaBien(m){ return !/haiku|claude-3/i.test(m); }
+function conFallback(m){ return /^claude-(opus-5|fable)/i.test(m); }
+
+function sysCoach(){
+  const estable =
+`Eres el entrenador personal de Juande y vives dentro de su propia app de entrenamiento. Hablas español de España, tuteándole, en frases cortas y directas, sin palabrería ni entusiasmo de folleto. Eres su entrenador, no un asistente: si algo le está saliendo mal, se lo dices claro.
+
+QUÉ PUEDES HACER
+Ves sus datos reales —lo que ha entrenado y lo que se ha saltado, sus pesos, sus marcas— y puedes reescribir su plan de entrenamiento con las herramientas. Los cambios se guardan en su móvil en el momento y los ve en la pestaña Hoy en cuanto acabes de responder. Él no tiene que confirmar nada, y todo lo que hagas se puede deshacer desde Más → Coach.
+
+CÓMO ESTÁ MONTADO EL PLAN
+· Un ciclo son 10 días seguidos, sin semanas: día 1, día 2… día 10, y vuelta a empezar.
+· Cada día tiene un tipo fijo (fuerza, cardio, suave, descanso) y tres variantes de ejercicios, A, B y C, que van rotando ciclo a ciclo: el ciclo 1 usa la A, el 2 la B, el 3 la C, el 4 otra vez la A.
+· Por eso, si reescribes el día 2 variante A, cambias esa sesión para todos los ciclos futuros en los que toque la A. Si quieres que un día quede igual siempre, usa variante "todas".
+· El día 10 es de descanso y de mediciones, y solo tiene una variante.
+· Entrena en casa: mancuernas, comba, rueda abdominal, esterilla y una silla. Nada de barra, máquinas ni gimnasio. No propongas nada que necesite otro material.
+
+CÓMO TRABAJAS
+· La adherencia manda. Si se está saltando entrenos, el plan es demasiado para la vida que tiene ahora: recorta antes de añadir. Un plan de cuatro días que cumple vale más que uno de ocho que no hace.
+· Mira el patrón, no el total. Si falla siempre el mismo día del ciclo, el problema es ese día: cámbialo de sitio, acórtalo o conviértelo en otra cosa.
+· Cuando reestructures de verdad, reescribe en la misma respuesta todas las sesiones que hagan falta, no de una en una a lo largo de la conversación.
+· Usa nombres del catálogo de ejercicios siempre que puedas: así la app le enseña la técnica, el vídeo y las alternativas. Si te inventas un nombre el ejercicio funciona igual, pero se queda sin ficha.
+· Respeta lo que ha descartado a mano: no se lo vuelvas a meter.
+· Antes de tirar abajo el plan entero por tu cuenta, pregúntale lo justo: cuántos días puede entrenar de verdad, cuánto rato tiene y qué es lo que no traga. Si él ya te ha pedido algo concreto, hazlo sin marear.
+· Cuando acabes de cambiar cosas, resume en dos o tres líneas qué has tocado y por qué. Nada de repetir ejercicio por ejercicio: eso ya lo ve en la app.
+· De dieta no hablas: eso lo lleva otra parte de la app. Si pregunta, dile dónde mirarlo.
+· No eres médico. Si te cuenta dolor, mareo o algo que huela a lesión, dile que lo mire un profesional antes de seguir.
+
+CATÁLOGO DE EJERCICIOS CON FICHA EN LA APP
+`+catalogoEj();
+  const vivo='EL PLAN AHORA MISMO\n'+planTexto()+'\n\nSUS DATOS\n'+contextoTexto();
+  return [{type:'text',text:estable,cache_control:{type:'ephemeral'}},{type:'text',text:vivo}];
+}
+
+function errAPI(status,t){
+  let m='Error '+status;
+  if(status===401) m='La clave de API no vale. Revísala en Más → Claude.';
+  else if(status===404) m='Ese modelo no existe o tu cuenta no lo tiene. Prueba con claude-opus-5 o claude-sonnet-5 en Más → Claude.';
+  else if(status===429) m='Demasiadas peticiones o te has quedado sin saldo. Míralo en console.anthropic.com.';
+  else if(status>=500) m='La API está fallando ahora mismo. Prueba en un minuto.';
+  const e=new Error(m); e.status=status; e.cuerpo=t; return e;
+}
+
+/* llamada con streaming; devuelve los bloques de contenido y el stop_reason */
+async function coachStream(msgs,onDelta,sinBeta){
+  const modelo=modeloCoach();
+  const heads={'content-type':'application/json','x-api-key':D.api.key,
+    'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'};
+  const cuerpo={model:modelo, max_tokens:16000, stream:true,
+    system:sysCoach(), messages:msgs, tools:HCOACH};
+  if(piensaBien(modelo)) cuerpo.thinking={type:'adaptive',display:'summarized'};
+  if(conFallback(modelo) && !sinBeta){
+    heads['anthropic-beta']='server-side-fallback-2026-07-01';
+    cuerpo.fallbacks='default';
+  }
+  const r=await fetch('https://api.anthropic.com/v1/messages',
+    {method:'POST',headers:heads,body:JSON.stringify(cuerpo)});
+  if(!r.ok){
+    const t=await r.text();
+    // si la cuenta no admite alguno de los extras, se repite la llamada sin ellos
+    if(r.status===400 && !sinBeta && /fallback|beta|thinking/i.test(t)) return coachStream(msgs,onDelta,true);
+    throw errAPI(r.status,t);
+  }
+  return leeSSE(r,onDelta);
+}
+
+async function leeSSE(r,onDelta){
+  const rd=r.body.getReader(), dec=new TextDecoder();
+  let buf='', bl=[], parcial={}, stop=null;
+  for(;;){
+    const paso=await rd.read(); if(paso.done) break;
+    buf+=dec.decode(paso.value,{stream:true});
+    let p;
+    while((p=buf.indexOf('\n\n'))>=0){
+      const trozo=buf.slice(0,p); buf=buf.slice(p+2);
+      const datos=trozo.split('\n').filter(l=>l.indexOf('data:')===0).map(l=>l.slice(5).trim()).join('');
+      if(!datos) continue;
+      let ev; try{ ev=JSON.parse(datos); }catch(err){ continue; }
+      if(ev.type==='error') throw new Error((ev.error&&ev.error.message)||'La API ha cortado la respuesta.');
+      if(ev.type==='content_block_start'){
+        bl[ev.index]=JSON.parse(JSON.stringify(ev.content_block||{}));
+        if(bl[ev.index].type==='tool_use') parcial[ev.index]='';
+      }
+      else if(ev.type==='content_block_delta'){
+        const b=bl[ev.index], d=ev.delta||{}; if(!b) continue;
+        if(d.type==='text_delta'){ b.text=(b.text||'')+d.text; onDelta('texto',d.text); }
+        else if(d.type==='thinking_delta'){ b.thinking=(b.thinking||'')+d.thinking; onDelta('pensando',b.thinking); }
+        else if(d.type==='signature_delta'){ b.signature=d.signature; }
+        else if(d.type==='input_json_delta'){ parcial[ev.index]=(parcial[ev.index]||'')+d.partial_json; }
+      }
+      else if(ev.type==='content_block_stop'){
+        const b=bl[ev.index];
+        if(b&&b.type==='tool_use'){ try{ b.input=JSON.parse(parcial[ev.index]||'{}'); }catch(err){ b.input={}; } }
+      }
+      else if(ev.type==='message_delta'){ if(ev.delta&&ev.delta.stop_reason) stop=ev.delta.stop_reason; }
+    }
+  }
+  return {content:bl.filter(Boolean), stop_reason:stop};
+}
+
+/* ---------- la conversación ---------- */
+let CHAT=[], ocupado=false, VIVO=null;
+
+/* rehace el hilo para la API a partir de lo guardado (solo el texto) */
+function chatInit(){
+  CHAT=[];
+  D.chat.forEach(m=>{
+    const t=String(m.t||'').trim(); if(!t) return;
+    const rol=m.r==='u'?'user':'assistant';
+    if(CHAT.length && CHAT[CHAT.length-1].role===rol) CHAT[CHAT.length-1].content[0].text+='\n\n'+t;
+    else CHAT.push({role:rol,content:[{type:'text',text:t}]});
+  });
+  while(CHAT.length && CHAT[0].role!=='user') CHAT.shift();
+}
+/* recorta el hilo por turnos completos, sin partir una herramienta de su resultado */
+function podaCHAT(){
+  while(CHAT.length>30){
+    CHAT.shift();
+    while(CHAT.length && !(CHAT[0].role==='user' && CHAT[0].content[0] && CHAT[0].content[0].type==='text')) CHAT.shift();
+  }
+}
+
+async function coachManda(txt){
+  if(ocupado) return;
+  txt=String(txt||'').trim(); if(!txt) return;
+  if(!D.api.key){ ajustesIA(true); return; }
+  const inp=$('#chIn'); if(inp){ inp.value=''; inp.style.height='auto'; inp.blur(); }
+  if(!CHAT.length) chatInit();
+  D.chat.push({r:'u',t:txt,ts:Date.now()}); save();
+  CHAT.push({role:'user',content:[{type:'text',text:txt}]});
+  podaCHAT();
+  ocupado=true; VIVO={t:'',p:'',acc:[]};
+  renderCoach(); abajo();
+  try{
+    for(let it=0; it<8; it++){
+      pintaVivo();
+      const j=await coachStream(CHAT,(k,s)=>{
+        if(k==='texto') VIVO.t+=s; else VIVO.p=s;
+        pintaVivo();
+      });
+      if(j.stop_reason==='refusal'){
+        VIVO.t+=(VIVO.t?'\n\n':'')+'No he podido contestar a eso. Dímelo de otra forma.';
+        break;
+      }
+      const cont=(j.content||[]).filter(b=>!(b.type==='text'&&!String(b.text||'').trim()));
+      CHAT.push({role:'assistant',content:cont.length?cont:[{type:'text',text:'…'}]});
+      const usos=cont.filter(b=>b.type==='tool_use');
+      if(!usos.length || j.stop_reason!=='tool_use') break;
+      if(usos.some(u=>MUTA[u.name]))
+        snapshot(usos.map(u=>(u.input&&u.input.resumen)||u.name).join(' · '));
+      const res=usos.map(u=>{
+        let out;
+        try{ out=aplicaHerr(u.name,u.input||{}); }
+        catch(err){ out='Error al aplicarlo: '+err.message; }
+        VIVO.acc.push({n:u.name, d:(u.input&&u.input.resumen)||out, mal:/^Error/.test(out)});
+        return {type:'tool_result',tool_use_id:u.id,content:out};
+      });
+      CHAT.push({role:'user',content:res});
+      VIVO.p=''; pintaVivo();
+    }
+    D.chat.push({r:'a',t:VIVO.t||'Hecho.',acc:VIVO.acc,ts:Date.now()});
+  }catch(err){
+    D.chat.push({r:'a',t:VIVO.t,acc:VIVO.acc,err:err.message,ts:Date.now()});
+  }
+  if(D.chat.length>60) D.chat=D.chat.slice(-60);
+  save();
+  ocupado=false; VIVO=null;
+  renderTodo(); setTimeout(abajo,40);
+}
+
+function borraChat(){
+  if(!confirm('Se borra la conversación. Los cambios que el coach ya haya hecho en el plan se quedan. ¿Seguro?')) return;
+  D.chat=[]; CHAT=[]; save(); renderCoach(); toast('Conversación borrada');
+}
+
+/* ---------- pintar ---------- */
+function fmtMD(s){
+  const li=esc(String(s||'')).split('\n');
+  let out='', enLista=false;
+  li.forEach(l=>{
+    const esLi=/^\s*[-•*]\s+/.test(l) || /^\s*\d+[.)]\s+/.test(l);
+    if(esLi && !enLista){ out+='<ul>'; enLista=true; }
+    if(!esLi && enLista){ out+='</ul>'; enLista=false; }
+    const t=l.replace(/^\s*[-•*]\s+/,'').replace(/^\s*\d+[.)]\s+/,'')
+             .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+             .replace(/`(.+?)`/g,'<code>$1</code>');
+    const tit=t.match(/^#{1,4}\s+(.*)$/);
+    if(esLi) out+='<li>'+t+'</li>';
+    else if(tit) out+='<p class="chh">'+tit[1]+'</p>';
+    else if(t.trim()) out+='<p>'+t+'</p>';
+  });
+  if(enLista) out+='</ul>';
+  return out;
+}
+const ACCT={reescribir_sesion:'Sesión reescrita', restaurar_plan:'Plan restaurado',
+            reiniciar_ciclo:'Ciclo reiniciado', mover_ciclo:'Ciclo movido'};
+function cuerpoResp(m){
+  let c='';
+  if(m.t) c+=fmtMD(m.t);
+  (m.acc||[]).forEach(a=>{
+    c+='<div class="acc'+(a.mal?' mal':'')+'"><b>'+esc(ACCT[a.n]||'Cambio')+'</b>'+esc(a.d||'')+'</div>';
+  });
+  if(m.err) c+='<div class="acc mal"><b>No ha salido</b>'+esc(m.err)+'</div>';
+  return c;
+}
+function burbuja(m){
+  if(m.r==='u') return '<div class="ch u"><div class="b">'+fmtMD(m.t)+'</div></div>';
+  return '<div class="ch a"><div class="b">'+(cuerpoResp(m)||'<p class="muted">…</p>')+'</div></div>';
+}
+function pintaVivo(){
+  const e=$('#chVivo'); if(!e||!VIVO) return;
+  let c=cuerpoResp({t:VIVO.t,acc:VIVO.acc});
+  if(!c) c='<p class="muted"><span class="spin"></span>'+esc(VIVO.p?VIVO.p.slice(-160):'Mirando tus datos…')+'</p>';
+  e.innerHTML='<div class="b">'+c+'</div>';
+  abajo();
+}
+function abajo(){
+  if($('#v-coach') && $('#v-coach').classList.contains('on'))
+    window.scrollTo({top:document.body.scrollHeight});
+}
+const SUGER=[
+ 'Mira lo que estoy cumpliendo de verdad y dime qué hay que cambiar',
+ 'Me salto muchos entrenos: recorta el plan a lo que sí voy a hacer',
+ 'Reinicia los ciclos desde hoy, quiero empezar limpio',
+ 'Entre semana solo tengo 30 minutos',
+ 'Estoy aburrido de estos ejercicios, cámbiamelos'
+];
+function renderCoach(){
+  const st=estado(hoyISO()), A=adherencia();
+  let h='';
+  if(!D.api.key){
+    h+=`<div class="card"><div class="ct">Te falta la clave</div>
+      <p>El coach habla con Claude, así que necesita tu clave de API. Se guarda solo en este móvil.</p>
+      <button class="btn-p btn-w" onclick="ajustesIA(true)">Configurar la clave</button></div>`;
+  }
+  h+=`<div class="grid3" style="margin-bottom:14px">
+    <div class="stat"><div class="l">Cumples</div><div class="v" style="font-size:19px">${A.pct}%</div><div class="n">de lo programado</div></div>
+    <div class="stat"><div class="l">30 días</div><div class="v" style="font-size:19px">${A.d30}</div><div class="n">entrenos hechos</div></div>
+    <div class="stat"><div class="l">Ciclo</div><div class="v" style="font-size:19px">${st.dia}<span style="font-size:13px;color:var(--tx3)">/10</span></div><div class="n">ciclo ${st.ciclo}</div></div>
+  </div>`;
+
+  h+=`<div id="chLog">`;
+  if(!D.chat.length){
+    h+=`<div class="card"><div class="ct">Tu entrenador</div>
+      <p style="margin-bottom:0">Ve lo que entrenas y lo que te saltas, y puede reescribir el plan entero: cambiarte los
+      ejercicios de cualquier día, cambiar los días de sitio, recortarlo o volver a empezar los ciclos desde hoy.
+      Los cambios se aplican solos, y siempre puedes deshacerlos en <strong>Más → Coach</strong>.</p></div>`;
+  }
+  D.chat.forEach(m=>{ h+=burbuja(m); });
+  if(ocupado) h+=`<div class="ch a" id="chVivo"><div class="b"><p class="muted"><span class="spin"></span>Mirando tus datos…</p></div></div>`;
+  h+=`</div>`;
+
+  if(!ocupado && D.chat.length<2){
+    h+=`<div class="sug">`;
+    SUGER.forEach(s=>{ h+=`<button onclick="coachManda(this.textContent)">${esc(s)}</button>`; });
+    h+=`</div>`;
+  }
+
+  h+=`<div class="chbar">
+    <textarea id="chIn" rows="1" placeholder="Dile qué quieres cambiar…"${ocupado?' disabled':''}
+      oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,130)+'px'"
+      onkeydown="if(event.key==='Enter'&&!event.shiftKey&&!/iPhone|iPad|Android/.test(navigator.userAgent)){event.preventDefault();coachManda(this.value)}"></textarea>
+    <button class="btn-p chgo" onclick="coachManda($('#chIn').value)"${ocupado?' disabled':''} aria-label="Enviar">
+      <svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+  </div>`;
+  if(D.chat.length) h+=`<button class="btn-w btn-gh" style="margin-top:10px" onclick="borraChat()">Borrar la conversación</button>`;
+  h+=`<p class="muted" style="text-align:center;margin:14px 0 6px">Cada respuesta gasta unos céntimos de tu saldo de Anthropic. El coach no es médico.</p>`;
+  $('#v-coach').innerHTML=h;
+}
+
+
 /* ══════════════════ ARRANQUE ══════════════════ */
 function nav(v){
   document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
   document.querySelectorAll('section').forEach(s=>s.classList.toggle('on',s.id==='v-'+v));
-  const T={hoy:['Hoy',''],ciclo:['El ciclo',''],peso:['Peso',''],dieta:['Dieta',''],mas:['Más','']};
+  const T={hoy:['Hoy',''],ciclo:['El ciclo',''],coach:['Coach',''],peso:['Peso',''],dieta:['Dieta',''],mas:['Más','']};
   if(v!=='hoy'){ $('#hTitle').textContent=T[v][0]; $('#hSub').textContent='Ciclo '+estado(hoyISO()).ciclo+' · día '+estado(hoyISO()).dia; }
   else renderHoy();
+  if(v==='coach'){ renderCoach(); if(D.chat.length){ setTimeout(abajo,50); return; } }
   window.scrollTo({top:0});
 }
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>nav(b.dataset.v));
 
-function renderTodo(){ renderHoy(); renderCiclo(); renderPeso(); renderDieta(); renderMas(); }
+function renderTodo(){ renderHoy(); renderCiclo(); renderCoach(); renderPeso(); renderDieta(); renderMas(); }
 renderTodo();
 
 // si el día cambia mientras la app está abierta

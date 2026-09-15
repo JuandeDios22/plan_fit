@@ -77,7 +77,8 @@ al cocinar. Es lo que hace que los números del menú y de la app cuadren entre 
 con conexión. Tus datos no se tocan.
 
 **Si el ciclo se descuadra** (te saltaste días, te fuiste de viaje): en **Más → Ajuste del
-ciclo** lo mueves adelante o atrás hasta que cuadre con la sesión que te toca.
+ciclo** lo mueves adelante o atrás hasta que cuadre con la sesión que te toca. Si el descuadre
+es gordo —semanas sin entrenar—, mejor díselo al **Coach** y que lo reinicie.
 
 ---
 
@@ -90,15 +91,17 @@ va al repositorio ni pasa por ningún servidor intermedio.
 1. Entra en **console.anthropic.com** y crea una cuenta.
 2. En **Billing**, mete **5 $** de saldo.
 3. En **API keys** → **Create key**. Cópiala.
-4. En la app: **Más → Reconocimiento por foto → Configurar la clave**. Pégala y pulsa
-   **Probar la clave** para confirmar que funciona.
+4. En la app: **Más → Claude → Configurar la clave**. Pégala y pulsa **Probar la clave**
+   para confirmar que funciona.
+
+La misma clave sirve para la foto de la comida y para el **Coach** (más abajo).
 
 **Cuánto cuesta:** con el modelo Haiku, cada foto sale por unos **0,003 $**. Aunque hagas
 4 fotos al día desde hoy hasta la boda, el total es **menos de 3 $**. Con 5 $ te sobra.
 
 **Si algún día falla con "ese modelo no existe":** los modelos se renuevan cada cierto
-tiempo. Entra en **Más → Reconocimiento por foto** y cambia el nombre del modelo por el
-que esté vigente (por ejemplo `claude-sonnet-5`). No hay que tocar nada más.
+tiempo. Entra en **Más → Claude** y cambia el nombre del modelo por el que esté vigente
+(por ejemplo `claude-sonnet-5`). No hay que tocar nada más.
 
 > **Sobre la precisión:** la estimación por foto se equivoca típicamente entre un 20 y un
 > 40 %, y falla más con guisos, salsas y aceite — justo donde más se esconden las calorías.
@@ -118,6 +121,54 @@ darle una aclaración ("el pollo eran 250 g, sin aceite") y que lo repase.
 
 Y si no tienes clave o estás sin cobertura, el botón **Calcular sin la API** reconoce lo que has
 escrito contra la tabla de alimentos y hace las cuentas en el propio móvil.
+
+---
+
+## El Coach
+
+Es la pestaña nueva de abajo, la del bocadillo. Es un entrenador con el que hablas y que
+**puede cambiar el plan de verdad**: no te da consejos para que los apliques tú, los aplica él.
+
+**Qué ve.** Todo lo que hay en la app: qué sesiones tenías programadas y cuáles has hecho,
+cuáles empezaste y dejaste a medias, cuáles ni tocaste, en qué día del ciclo fallas siempre,
+tus notas, tus mejores marcas, tu peso y la curva objetivo, y los ejercicios que has cambiado
+o descartado a mano.
+
+**Qué puede hacer.**
+
+- **Reescribir cualquier sesión.** Los ejercicios, las series, las repeticiones, las notas, el
+  nombre del día, su tipo y su duración. Recuerda que cada día tiene tres variantes (A, B y C)
+  que van rotando: si cambia el día 2 variante A, lo cambia para todos los ciclos en los que
+  toque la A. Si le pides que un día quede igual siempre, cambia las tres de golpe.
+- **Volver a empezar los ciclos.** Le dices *"reinicia desde hoy"* y hoy pasa a ser el día 1 de
+  un ciclo nuevo. **Tu historial no se borra:** las sesiones y los récords de antes siguen ahí,
+  y el ciclo nuevo coge un número que no pisa nada. Puede además retomar en el bloque que le
+  digas (por ejemplo *Adaptación*, si vuelves de un parón).
+- **Mover el ciclo** unos días, para recuadrarlo sin reiniciar nada.
+- **Deshacer.** Todo lo anterior.
+
+**Cosas útiles que decirle:**
+
+> *"Me salto la mitad de los entrenos, recórtame el plan a lo que sí voy a hacer"*
+> *"Entre semana solo tengo 30 minutos"*
+> *"Reinicia los ciclos desde hoy, quiero empezar limpio"*
+> *"Llevo tres semanas sin entrenar, retómame suave"*
+> *"Estoy aburrido de estos ejercicios"*
+
+**Los cambios se aplican solos.** No hay que confirmar nada: cuando el coach termina de
+hablar, la pestaña **Hoy** ya está cambiada. Los días que ha tocado salen con una etiqueta
+morada de **Coach**.
+
+**Si te arrepientes:** en **Más → Coach** tienes la lista de los últimos cambios con un botón
+**Volver aquí** en cada uno, y un **Volver al plan original** que lo deja todo como venía de
+fábrica. Tus entrenos registrados no se tocan nunca.
+
+**Cuánto cuesta.** El coach usa el modelo bueno (Opus), porque tiene que razonar sobre tu plan
+entero y sobre meses de datos. Cada respuesta ronda los **3 a 10 céntimos**. No es para
+charlar: es para sentarte cinco minutos cada pocas semanas y recolocar el plan. Si quieres
+gastar menos, en **Más → Claude** puedes ponerle `claude-sonnet-5`.
+
+**No es médico.** Si te duele algo, eso lo mira un profesional.
 
 ---
 
@@ -150,8 +201,10 @@ escrito contra la tabla de alimentos y hace las cuentas en el propio móvil.
   multiplicarlas por tres el domingo.
   El resto de pestañas: tus calorías y macros (se ajustan solos al cruzar 98, 92 y 86 kg), qué
   comer, qué no, y cómo salir a comer fuera.
-- **Más** — tus récords por ejercicio, los cambios y descartes de ejercicios, las 6 reglas y la
-  copia de seguridad.
+- **Coach** — el chat que reescribe el plan. Arriba, tres números: qué porcentaje cumples de
+  lo programado, cuántos entrenos llevas en 30 días y por qué día del ciclo vas.
+- **Más** — tus récords por ejercicio, los cambios del coach con su deshacer, los cambios y
+  descartes de ejercicios, las 6 reglas y la copia de seguridad.
 
 El catálogo tiene **64 fichas de ejercicio**: los del plan y los que se ofrecen como alternativa.
 Cada serie que registras guarda el nombre del ejercicio que hiciste, así que **cambiar un ejercicio
