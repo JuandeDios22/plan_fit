@@ -176,8 +176,10 @@ gastar menos, en **Más → Claude** puedes ponerle `claude-sonnet-5`.
 
 - **Hoy** — la sesión que toca, calculada automáticamente por la fecha. Toca el cuadrado
   de cada ejercicio para marcarlo hecho. En los días de fuerza escribe el peso y las
-  repeticiones de cada serie; al marcar el ✓ de una serie arranca solo el descanso de 90 s
-  y te vibra el móvil cuando toca la siguiente. El botón **i** de cada ejercicio abre su
+  repeticiones de cada serie; al marcar el ✓ de una serie arranca solo el descanso y te vibra
+  el móvil cuando toca la siguiente. Son **60 s** de salida, y lo cambias en **Más → Descanso
+  entre series** (o con los botones de la propia sesión, para un descanso suelto).
+  El botón **i** de cada ejercicio abre su
   ficha: patrón, nivel y material, posición de partida, ejecución, errores típicos, qué debes
   notar, un vídeo, y el mismo movimiento **un escalón más fácil o más exigente**.
   El botón **⇄** cambia el ejercicio: te propone alternativas del mismo patrón que puedas hacer

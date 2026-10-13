@@ -505,7 +505,7 @@ let D = load();
 function load(){
   try{ const r=JSON.parse(localStorage.getItem(KEY)); if(r&&r.v===1) return r; }catch(err){}
   return {v:1, offset:0, log:{}, peso:{}, cintura:{}, notas:{}, comidas:{}, favs:[], cambios:{}, veto:[],
-          plan:{}, anchor:null, chat:[], hist:[], api:Object.assign({},API0)};
+          plan:{}, anchor:null, chat:[], hist:[], descanso:60, api:Object.assign({},API0)};
 }
 // compatibilidad con copias antiguas
 if(!D.comidas) D.comidas={}; if(!D.favs) D.favs=[];
@@ -514,6 +514,7 @@ if(!D.api.coach) D.api.coach='claude-opus-5';
 if(!D.cambios) D.cambios={}; if(!D.veto) D.veto=[];
 if(!D.plan) D.plan={}; if(!D.chat) D.chat=[]; if(!D.hist) D.hist=[];
 if(D.anchor===undefined) D.anchor=null;
+if(!D.descanso) D.descanso=60;
 let saveT=null;
 function save(){ clearTimeout(saveT); saveT=setTimeout(()=>{
   try{ localStorage.setItem(KEY, JSON.stringify(D)); }catch(err){ toast('No se pudo guardar'); }
@@ -576,6 +577,20 @@ function startT(s,lab){
 function pintaT(){ const m=Math.floor(tLeft/60), s=tLeft%60; $('#tVal').textContent=m+':'+String(s).padStart(2,'0'); }
 function addT(s){ tLeft+=s; pintaT(); }
 function stopT(){ clearInterval(tInt); $('#timer').classList.remove('on'); }
+
+/* el descanso que arranca solo al marcar una serie */
+const DESCANSOS=[30,45,60,75,90,120,150,180];
+function desc(){ return D.descanso||60; }
+function fmtDesc(s){
+  if(s%60===0 && s>=120) return (s/60)+' min';
+  if(s<120) return s+' s';
+  return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
+}
+function startDesc(){ startT(desc(),'Descanso '+fmtDesc(desc())); }
+function setDescanso(s){
+  const n=Math.max(10,Math.min(600,Math.round(+s)||60));
+  D.descanso=n; save(); renderHoy(); renderMas(); toast('Descanso por defecto: '+fmtDesc(n));
+}
 
 /* ══════════════════ VISTA: HOY ══════════════════ */
 function claveDia(f){ const st=estado(f); return 'c'+st.ciclo+'d'+st.dia; }
@@ -681,12 +696,14 @@ function renderHoy(){
 
   // cronómetro rápido
   if(P.k==='fuerza'){
+    const dsc=desc(), otros=[60,90,120].filter(s=>s!==dsc).slice(0,2);
     h+=`<h3>Descanso entre series</h3>
-    <div class="grid3" style="margin-bottom:12px">
-      <button onclick="startT(60,'Descanso 60 s')">60 s</button>
-      <button onclick="startT(90,'Descanso 90 s')">90 s</button>
-      <button onclick="startT(120,'Descanso 2 min')">2 min</button>
-    </div>`;
+    <div class="grid3" style="margin-bottom:8px">
+      <button class="btn-p" onclick="startDesc()">${fmtDesc(dsc)}</button>
+      ${otros.map(s=>`<button onclick="startT(${s},'Descanso ${fmtDesc(s)}')">${fmtDesc(s)}</button>`).join('')}
+    </div>
+    <p class="muted" style="margin:0 0 14px">Al marcar el ✓ de una serie arranca solo el de
+      <strong>${fmtDesc(dsc)}</strong>. Se cambia en <span onclick="nav('mas')" style="text-decoration:underline">Más → Descanso entre series</span>.</p>`;
   }
 
   // nota libre
@@ -742,7 +759,7 @@ function setOk(i,s){
   const le=D.log[k]['e'+i]=D.log[k]['e'+i]||{sets:[]};
   le.n=nombreEj(i);
   le.sets[s]=le.sets[s]||{}; le.sets[s].ok=!le.sets[s].ok;
-  if(le.sets[s].ok){ vibra(15); startT(90,'Descanso 90 s'); }
+  if(le.sets[s].ok){ vibra(15); startDesc(); }
   // autocompleta el peso de la serie anterior si está vacío
   if(le.sets[s].ok && le.sets[s].w===undefined && s>0 && le.sets[s-1]) le.sets[s].w=le.sets[s-1].w;
   save(); renderHoy();
@@ -1194,6 +1211,19 @@ function renderMas(){
       t+='</table></div><p class="muted">No se te vuelven a proponer como alternativa.</p>';
     }
     return t; })()}
+
+  <h3>Descanso entre series</h3>
+  <div class="card">
+    <p style="margin:0 0 11px">El que arranca solo cuando marcas el ✓ de una serie.
+      Ahora mismo, <strong>${fmtDesc(desc())}</strong>.</p>
+    <div class="sug">
+      ${DESCANSOS.map(s=>`<button class="${s===desc()?'btn-p':''}" onclick="setDescanso(${s})">${fmtDesc(s)}</button>`).join('')}
+    </div>
+    <div class="fld" style="margin:4px 0 0"><label>Otro, en segundos</label>
+      <input type="number" inputmode="numeric" min="10" max="600" step="5" value="${desc()}" onchange="setDescanso(this.value)"></div>
+    <div class="muted" style="margin-top:10px">Entre 10 y 600 segundos. En la sesión siguen estando los
+      botones de siempre para arrancar un descanso suelto más corto o más largo.</div>
+  </div>
 
   <h3>Ajuste del ciclo</h3>
   <div class="card">
